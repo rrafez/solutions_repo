@@ -189,32 +189,32 @@
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1-investigating-the-range-as-a-function-of-the-angle-of-projection"><strong>Problem 1: Investigating the Range as a Function of the Angle of Projection</strong></h1>
 <h2 id="1-theoretical-foundation"><strong>1. Theoretical Foundation</strong></h2>
-<p>Projectile motion is a type of two-dimensional motion where an object is launched into the air with an initial velocity <span class="arithmatex">\(v_0\)</span> at an angle <span class="arithmatex">\(\theta\)</span> relative to the horizontal. The motion can be analyzed by breaking it into horizontal (x) and vertical (y) components.</p>
+<p>Projectile motion is a type of two-dimensional motion where an object is launched into the air with an initial velocity <span class="arithmatex">\(<span class="arithmatex">\(v_0\)</span>\)</span> at an angle <span class="arithmatex">\(<span class="arithmatex">\(\theta\)</span>\)</span> relative to the horizontal. The motion can be analyzed by breaking it into horizontal (x) and vertical (y) components.</p>
 <h3 id="11-equations-of-motion"><strong>1.1 Equations of Motion</strong></h3>
 <p>The horizontal and vertical components of the initial velocity are:
-<span class="arithmatex">\(v_{0x} = v_0 \cos(\theta)\)</span> test1
+<span class="arithmatex">\(<span class="arithmatex">\(v_{0x} = v_0 \cos(\theta)\)</span>\)</span>
 <span class="arithmatex">\(<span class="arithmatex">\(v_{0y} = v_0 \sin(\theta)\)</span>\)</span></p>
 <p>Using the kinematic equations, the motion in each direction is governed by:
 - <strong>Horizontal motion (constant velocity, no acceleration in the ideal case):</strong>
 <span class="arithmatex">\(<span class="arithmatex">\(x = v_{0x} t = v_0 \cos(\theta) t\)</span>\)</span>
 - <strong>Vertical motion (accelerated due to gravity):</strong>
-  $$ y = v_{0y} t - \frac{1}{2} g t^2 $$</p>
+<span class="arithmatex">\(<span class="arithmatex">\(y = v_{0y} t - \frac{1}{2} g t^2\)</span>\)</span></p>
 <p>where:
-- <span class="arithmatex">\(g\)</span> is the acceleration due to gravity <span class="arithmatex">\((9.81 \text{ m/s}^2)\)</span>
-- <span class="arithmatex">\(t\)</span> is the time of flight.</p>
+- <span class="arithmatex">\(<span class="arithmatex">\(g\)</span>\)</span> is the acceleration due to gravity <span class="arithmatex">\(<span class="arithmatex">\((9.81 \text{ m/s}^2)\)</span>\)</span>
+- <span class="arithmatex">\(<span class="arithmatex">\(t\)</span>\)</span> is the time of flight.</p>
 <h3 id="12-time-of-flight"><strong>1.2 Time of Flight</strong></h3>
-<p>The time of flight is determined by solving for when the projectile returns to the ground <span class="arithmatex">\((y = 0)\)</span>:
-$$ t = \frac{2 v_0 \sin(\theta)}{g} $$</p>
+<p>The time of flight is determined by solving for when the projectile returns to the ground <span class="arithmatex">\(<span class="arithmatex">\((y = 0)\)</span>\)</span>:
+<span class="arithmatex">\(<span class="arithmatex">\(t = \frac{2 v_0 \sin(\theta)}{g}\)</span>\)</span></p>
 <h3 id="13-range-equation"><strong>1.3 Range Equation</strong></h3>
-<p>The range <span class="arithmatex">\(R\)</span> is the horizontal distance traveled when the projectile lands:
-$$ R = v_{0x} \cdot t = v_0 \cos(\theta) \cdot \frac{2 v_0 \sin(\theta)}{g} $$</p>
-<p>Using the identity <span class="arithmatex">\(2 \sin(\theta) \cos(\theta) = \sin(2\theta)\)</span>, we get:
-$$ R = \frac{v_0^2 \sin(2\theta)}{g} $$</p>
+<p>The range <span class="arithmatex">\(<span class="arithmatex">\(R\)</span>\)</span> is the horizontal distance traveled when the projectile lands:
+<span class="arithmatex">\(<span class="arithmatex">\(R = v_{0x} \cdot t = v_0 \cos(\theta) \cdot \frac{2 v_0 \sin(\theta)}{g}\)</span>\)</span></p>
+<p>Using the identity <span class="arithmatex">\(<span class="arithmatex">\(2 \sin(\theta) \cos(\theta) = \sin(2\theta)\)</span>\)</span>, we get:
+<span class="arithmatex">\(<span class="arithmatex">\(R = \frac{v_0^2 \sin(2\theta)}{g}\)</span>\)</span></p>
 <h2 id="2-analysis-of-the-range"><strong>2. Analysis of the Range</strong></h2>
 <ul>
-<li>The range is maximized when <span class="arithmatex">\(\sin(2\theta) = 1\)</span>, which occurs at <span class="arithmatex">\(2\theta = 90^\circ\)</span>, or <span class="arithmatex">\(\theta = 45^\circ\)</span>.</li>
-<li>If the initial velocity <span class="arithmatex">\(v_0\)</span> increases, the range increases quadratically.</li>
-<li>If gravity <span class="arithmatex">\(g\)</span> increases (e.g., on another planet), the range decreases.</li>
+<li>The range is maximized when <span class="arithmatex">\(<span class="arithmatex">\(\sin(2\theta) = 1\)</span>\)</span>, which occurs at <span class="arithmatex">\(<span class="arithmatex">\(2\theta = 90^\circ\)</span>\)</span>, or <span class="arithmatex">\(<span class="arithmatex">\(\theta = 45^\circ\)</span>\)</span>.</li>
+<li>If the initial velocity <span class="arithmatex">\(<span class="arithmatex">\(v_0\)</span>\)</span> increases, the range increases quadratically.</li>
+<li>If gravity <span class="arithmatex">\(<span class="arithmatex">\(g\)</span>\)</span> increases (e.g., on another planet), the range decreases.</li>
 </ul>
 <h2 id="3-practical-applications"><strong>3. Practical Applications</strong></h2>
 <ul>
@@ -241,7 +241,7 @@ plt.grid()
 plt.show()
 </code></pre>
 <h1 id="example-usage">Example usage</h1>
-<p>projectile_range(v0=20)  # Change v0 to analyze different scenario</p>
+<p>projectile_range(v0=20)  # Change v0 to analyze different scenarios</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
