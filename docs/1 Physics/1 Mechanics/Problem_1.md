@@ -6,7 +6,7 @@ Projectile motion is a type of two-dimensional motion where an object is launche
 ### **1.1 Equations of Motion**
 The horizontal and vertical components of the initial velocity are:
 $$v_{0x} = v_0 \cos(\theta)$$
-$$ v_{0y} = v_0 \sin(\theta) $$
+$$v_{0y} = v_0 \sin(\theta)$$
 
 Using the kinematic equations, the motion in each direction is governed by:
 - **Horizontal motion (constant velocity, no acceleration in the ideal case):**
