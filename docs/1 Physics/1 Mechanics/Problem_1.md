@@ -61,4 +61,4 @@ def projectile_range(v0, g=9.81):
     plt.show()
 
 # Example usage
-projectile_range(v0=20)  # Change v0 to analyze different scenarios
+projectile_range(v0=20)  # Change v0 to analyze different scenario
