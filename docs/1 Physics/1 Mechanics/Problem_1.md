@@ -62,8 +62,9 @@ def projectile_range(v0, g=9.81):
     plt.grid()
     plt.show()
 
-# Example usage
-projectile_range(v0=20) 
+
+projectile_range(v0=20)
+```
 
 ## **V0=20**
 ![alt text](image.png)
