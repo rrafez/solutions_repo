@@ -34,11 +34,13 @@ Using the identity $$2 \sin(\theta) \cos(\theta) = \sin(2\theta)$$, we get:
 $$R = \frac{v_0^2 \sin(2\theta)}{g}$$
 
 ## **2. Analysis of the Range**
+
 - The range is maximized when $$\sin(2\theta) = 1$$, which occurs at $$2\theta = 90^\circ$$, or $$\theta = 45^\circ$$.
 - If the initial velocity $$v_0$$ increases, the range increases quadratically.
 - If gravity $$g$$ increases (e.g., on another planet), the range decreases.
 
 ## **3. Practical Applications**
+
 - **Sports:** Understanding projectile motion is crucial in games like soccer, basketball, and golf.
 - **Engineering:** Used in ballistics, rocketry, and artillery targeting systems.
 - **Real-World Effects:** Air resistance, wind, and uneven terrain can significantly alter the theoretical range.
