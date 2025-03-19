@@ -1,7 +1,7 @@
 # **Problem 1: Investigating the Range as a Function of the Angle of Projection**
 
 ## **1. Theoretical Foundation**
-Projectile motion is a type of two-dimensional motion where an object is launched into the air with an initial velocity $$v_0$$ at an angle $$\theta$$ relative to the horizontal. The motion can be analyzed by breaking it into horizontal (x) and vertical (y) components.
+Projectile motion is a type of two-dimensional motion where an object is launched into the air with an initial velocity $v_0$ at an angle $\theta$ relative to the horizontal. The motion can be analyzed by breaking it into horizontal (x) and vertical (y) components.
 
 ### **1.1 Equations of Motion**
 The horizontal and vertical components of the initial velocity are:
@@ -17,11 +17,13 @@ Using the kinematic equations, the motion in each direction is governed by:
   $$y = v_{0y} t - \frac{1}{2} g t^2$$
 
 where:
-- $$g$$ is the acceleration due to gravity $$(9.81 \text{ m/s}^2)$$
-- $$t$$ is the time of flight.
+
+- $g$ is the acceleration due to gravity $(9.81 \text{ m/s}^2)$
+- $t$ is the time of flight.
 
 ### **1.2 Time of Flight**
-The time of flight is determined by solving for when the projectile returns to the ground $$(y = 0)$$:
+
+The time of flight is determined by solving for when the projectile returns to the ground $(y = 0)$:
 $$t = \frac{2 v_0 \sin(\theta)}{g}$$
 
 ### **1.3 Range Equation**
