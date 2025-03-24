@@ -157,16 +157,16 @@ projectile_range_multi_g()
 ## **5. Frequently Asked Questions (FAQ)**  
 
 ### **1. At what angle is the maximum range achieved in projectile motion?**  
-- The maximum range is achieved at **45°** in ideal conditions without air resistance.  
+- The maximum range is achieved at **45°** because, at this angle, the horizontal and vertical components of the velocity are balanced, maximizing distance.
 
 ### **2. How does the initial velocity affect the range?**  
-- The range increases **quadratically (v₀²)** as the initial velocity increases.  
+- The range increases **quadratically (v₀²)** as the initial velocity increases, meaning a faster launch gives the projectile more distance to travel.
 
 ### **3. What happens if gravity changes?**  
-- A higher gravitational acceleration **reduces the range**, while a lower gravity **increases it**.  
+- A higher gravitational acceleration **reduces the range** because the projectile falls back to the ground more quickly, while a lower gravity **increases the range** by allowing the projectile to stay in the air longer.
 
 ### **4. Does mass affect the projectile's range?**  
-- No, in ideal conditions without air resistance, mass does not affect the range.  
+- No, in ideal conditions without air resistance, mass does not affect the range because both heavy and light projectiles fall at the same rate under the same conditions.
 
 ### **5. How does air resistance impact projectile motion?**  
-- Air resistance **reduces the range**, alters the trajectory, and affects the optimal launch angle.  
+- Air resistance **reduces the range** by slowing down the projectile and changing its trajectory, making the optimal launch angle lower than 45°.
