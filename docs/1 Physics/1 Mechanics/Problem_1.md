@@ -52,7 +52,7 @@ The following Python script simulates projectile motion and plots the range as a
 import numpy as np
 import matplotlib.pyplot as plt
 
-def projectile_range(v0, g=9.81):
+def projectile_range(v0_lıst, g=9.81):
     angles = np.linspace(0, 90, 100)  # Angle range from 0 to 90 degrees
     angles_rad = np.radians(angles)  # Convert degrees to radians
     ranges = (v0**2 * np.sin(2 * angles_rad)) / g  # Compute range
@@ -75,3 +75,95 @@ projectile_range(v0=20)
 
 ## **V0=45(TOP ONE)**
 ![alt text](image-1.png)
+
+## **5. Frequently Asked Questions (FAQ)**  
+
+### **1. At what angle is the maximum range achieved in projectile motion?**  
+- The maximum range is achieved at **45°** in ideal conditions without air resistance.  
+
+### **2. How does the initial velocity affect the range?**  
+- The range increases **quadratically (v₀²)** as the initial velocity increases.  
+
+### **3. What happens if gravity changes?**  
+- A higher gravitational acceleration **reduces the range**, while a lower gravity **increases it**.  
+
+### **4. Does mass affect the projectile's range?**  
+- No, in ideal conditions without air resistance, mass does not affect the range.  
+
+### **5. How does air resistance impact projectile motion?**  
+- Air resistance **reduces the range**, alters the trajectory, and affects the optimal launch angle.  
+
+## **Explanation of the Graph**  
+
+This graph illustrates how the horizontal range of a projectile depends on the launch angle for different initial velocities (\( v_0 \)).  
+
+- Each curve represents a different initial velocity.  
+- The maximum range occurs at **45°**.  
+- As the initial velocity increases, the range increases **quadratically (\( v_0^2 \))**.  
+- Lower initial velocities result in shorter ranges, while higher velocities allow the projectile to travel further.  
+
+This helps in understanding how objects like balls, bullets, or rockets behave when launched at different speeds and angles. 🚀  
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def projectile_range_multi_v0(v0_list, g=9.81):
+    angles = np.linspace(0, 90, 100)
+    angles_rad = np.radians(angles)
+    
+    plt.figure(figsize=(8, 5))
+    for v0 in v0_list:
+        ranges = (v0**2 * np.sin(2 * angles_rad)) / g
+        plt.plot(angles, ranges, label=f'v0 = {v0} m/s')
+    
+    plt.xlabel("Angle (degrees)")
+    plt.ylabel("Range (m)")
+    plt.title("Projectile Range vs. Launch Angle for Different v0")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+projectile_range_multi_v0([10, 20, 30, 40])
+```
+
+![alt text](image-2.png)
+
+## **Explanation of the Graph**  
+
+This graph shows how the horizontal range of a projectile changes with the launch angle for different gravitational accelerations ($g$).  
+
+- Each curve represents a different gravitational environment: Earth ($g = 9.81 \, \text{m/s}^2$), Moon ($g = 1.62 \, \text{m/s}^2$), and Jupiter ($g = 24.79 \, \text{m/s}^2$).
+- As gravity decreases (like on the Moon), the range increases for the same initial velocity.
+- On higher gravity bodies (like Jupiter), the range decreases.
+
+This graph helps understand how the same projectile behaves differently in various planetary environments. 🌍🌑🪐  
+
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def projectile_range_multi_g(v0=20, g_values=[9.81, 1.62, 24.79]):
+    angles = np.linspace(0, 90, 100)
+    angles_rad = np.radians(angles)
+    g_labels = ["Earth (9.81 m/s²)", "Moon (1.62 m/s²)", "Jupiter (24.79 m/s²)"]
+    
+    plt.figure(figsize=(8, 5))
+    for g, label in zip(g_values, g_labels):
+        ranges = (v0**2 * np.sin(2 * angles_rad)) / g
+        plt.plot(angles, ranges, label=label)
+    
+    plt.xlabel("Angle (degrees)")
+    plt.ylabel("Range (m)")
+    plt.title("Projectile Range vs. Launch Angle for Different Gravities")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+# Example usage
+projectile_range_multi_g()
+
+```
+
+![alt text](image-3.png)
