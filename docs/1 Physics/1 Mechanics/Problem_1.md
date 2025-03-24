@@ -76,22 +76,7 @@ projectile_range(v0=20)
 ## **V0=45(TOP ONE)**
 ![alt text](image-1.png)
 
-## **5. Frequently Asked Questions (FAQ)**  
 
-### **1. At what angle is the maximum range achieved in projectile motion?**  
-- The maximum range is achieved at **45°** in ideal conditions without air resistance.  
-
-### **2. How does the initial velocity affect the range?**  
-- The range increases **quadratically (v₀²)** as the initial velocity increases.  
-
-### **3. What happens if gravity changes?**  
-- A higher gravitational acceleration **reduces the range**, while a lower gravity **increases it**.  
-
-### **4. Does mass affect the projectile's range?**  
-- No, in ideal conditions without air resistance, mass does not affect the range.  
-
-### **5. How does air resistance impact projectile motion?**  
-- Air resistance **reduces the range**, alters the trajectory, and affects the optimal launch angle.  
 
 ## **Explanation of the Graph**  
 
@@ -137,7 +122,7 @@ This graph shows how the horizontal range of a projectile changes with the launc
 - As gravity decreases (like on the Moon), the range increases for the same initial velocity.
 - On higher gravity bodies (like Jupiter), the range decreases.
 
-This graph helps understand how the same projectile behaves differently in various planetary environments. 🌍🌑🪐  
+This graph helps understand how the same projectile behaves differently in various planetary environments.   
 
 
 ```python
@@ -167,3 +152,21 @@ projectile_range_multi_g()
 ```
 
 ![alt text](image-3.png)
+
+
+## **5. Frequently Asked Questions (FAQ)**  
+
+### **1. At what angle is the maximum range achieved in projectile motion?**  
+- The maximum range is achieved at **45°** in ideal conditions without air resistance.  
+
+### **2. How does the initial velocity affect the range?**  
+- The range increases **quadratically (v₀²)** as the initial velocity increases.  
+
+### **3. What happens if gravity changes?**  
+- A higher gravitational acceleration **reduces the range**, while a lower gravity **increases it**.  
+
+### **4. Does mass affect the projectile's range?**  
+- No, in ideal conditions without air resistance, mass does not affect the range.  
+
+### **5. How does air resistance impact projectile motion?**  
+- Air resistance **reduces the range**, alters the trajectory, and affects the optimal launch angle.  
