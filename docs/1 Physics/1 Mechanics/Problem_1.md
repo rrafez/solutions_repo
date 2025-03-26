@@ -87,7 +87,7 @@ This graph illustrates how the horizontal range of a projectile depends on the l
 - As the initial velocity increases, the range increases **quadratically (\( v_0^2 \))**.  
 - Lower initial velocities result in shorter ranges, while higher velocities allow the projectile to travel further.  
 
-This helps in understanding how objects like balls, bullets, or rockets behave when launched at different speeds and angles. 🚀  
+This helps in understanding how objects like balls, bullets, or rockets behave when launched at different speeds and angles.   
 
 ```python
 import numpy as np
