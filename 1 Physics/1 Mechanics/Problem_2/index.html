@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Problem 2 - Physics and Mathematics</title>
+<title>🌀 Investigating the Dynamics of a Forced Damped Pendulum - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Problem 2";
+        var mkdocs_page_name = "\ud83c\udf00 Investigating the Dynamics of a Forced Damped Pendulum";
         var mkdocs_page_input_path = "1 Physics/1 Mechanics/Problem_2.md";
         var mkdocs_page_url = null;
       </script>
@@ -48,8 +48,24 @@
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../Problem_1/">Problem 1: Investigating the Range as a Function of the Angle of Projection</a>
 </li>
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 2</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">🌀 Investigating the Dynamics of a Forced Damped Pendulum</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#motivation">🎯 Motivation</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#1-theoretical-foundation">🧠 1. Theoretical Foundation</a>
+<ul>
+<li class="toctree-l4"><a class="reference internal" href="#governing-equation">⚙️ Governing Equation</a>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#small-angle-approximation">🧪 Small-Angle Approximation</a>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#approximate-solution-linear-case">📐 Approximate Solution (Linear Case)</a>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#resonance">🔊 Resonance</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#2-python-simulation-and-analysis">💻 2. Python Simulation and Analysis</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -163,7 +179,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">1 Mechanics</li>
-<li class="breadcrumb-item active">Problem 2</li>
+<li class="breadcrumb-item active">🌀 Investigating the Dynamics of a Forced Damped Pendulum</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -171,7 +187,133 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-2">Problem 2</h1>
+<h1 id="investigating-the-dynamics-of-a-forced-damped-pendulum">🌀 Investigating the Dynamics of a Forced Damped Pendulum</h1>
+<h2 id="motivation">🎯 Motivation</h2>
+<p>The <strong>forced damped pendulum</strong> is a classical nonlinear system that exhibits rich dynamics due to the interaction of damping, restoring forces, and external periodic driving. As system parameters vary, the motion can transition from simple periodic motion to chaotic behavior.</p>
+<p>Understanding this system provides insights into:
+- Mechanical resonance
+- Vibration control in structures
+- Electrical analogs (RLC circuits)
+- Energy harvesting and biomechanical systems</p>
+<hr/>
+<h2 id="1-theoretical-foundation">🧠 1. Theoretical Foundation</h2>
+<h3 id="governing-equation">⚙️ Governing Equation</h3>
+<p>The motion of a forced damped pendulum is governed by:</p>
+<div class="arithmatex">\[
+\frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \sin(\theta) = A \cos(\omega t)
+\]</div>
+<p>Where:
+- <span class="arithmatex">\(\theta(t)\)</span>: Angular displacement
+- <span class="arithmatex">\(\gamma\)</span>: Damping coefficient
+- <span class="arithmatex">\(\omega_0 = \sqrt{\frac{g}{L}}\)</span>: Natural frequency
+- <span class="arithmatex">\(A\)</span>: Driving force amplitude
+- <span class="arithmatex">\(\omega\)</span>: Driving frequency</p>
+<hr/>
+<h3 id="small-angle-approximation">🧪 Small-Angle Approximation</h3>
+<p>When <span class="arithmatex">\(|\theta|\)</span> is small: <span class="arithmatex">\(\sin(\theta) \approx \theta\)</span>, giving the linearized form:</p>
+<div class="arithmatex">\[
+\frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \theta = A \cos(\omega t)
+\]</div>
+<p>This is the equation of a <strong>driven damped harmonic oscillator</strong>.</p>
+<hr/>
+<h3 id="approximate-solution-linear-case">📐 Approximate Solution (Linear Case)</h3>
+<p>Assuming a solution:</p>
+<div class="arithmatex">\[
+\theta(t) = \theta_0 \cos(\omega t - \phi)
+\]</div>
+<p>We find:</p>
+<div class="arithmatex">\[
+\theta_0 = \frac{A}{\sqrt{(\omega_0^2 - \omega^2)^2 + (\gamma \omega)^2}}, \quad
+\tan(\phi) = \frac{\gamma \omega}{\omega_0^2 - \omega^2}
+\]</div>
+<hr/>
+<h3 id="resonance">🔊 Resonance</h3>
+<p>Resonance occurs near:</p>
+<div class="arithmatex">\[
+\omega_{\text{res}} \approx \sqrt{\omega_0^2 - \frac{\gamma^2}{2}}
+\]</div>
+<p>At this frequency, the amplitude reaches a maximum, especially when damping is low.</p>
+<hr/>
+<h2 id="2-python-simulation-and-analysis">💻 2. Python Simulation and Analysis</h2>
+<p>```python</p>
+<h1 id="import-required-libraries">📦 Import required libraries</h1>
+<p>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp</p>
+<h1 id="parameters">🔧 Parameters</h1>
+<p>gamma = 0.2         # Damping coefficient
+omega0 = 1.5        # Natural frequency
+A = 1.2             # Driving amplitude
+omega = 2/3         # Driving frequency</p>
+<h1 id="define-the-differential-equation">🧮 Define the differential equation</h1>
+<p>def pendulum(t, y):
+    theta, omega_theta = y
+    dtheta_dt = omega_theta
+    domega_dt = -gamma * omega_theta - omega0**2 * np.sin(theta) + A * np.cos(omega * t)
+    return [dtheta_dt, domega_dt]</p>
+<h1 id="time-span-and-initial-conditions">⏱️ Time span and initial conditions</h1>
+<p>t = np.linspace(0, 100, 10000)
+y0 = [0.1, 0.0]  # Initial angle and angular velocity</p>
+<h1 id="solve-the-ode">🌀 Solve the ODE</h1>
+<p>sol = solve_ivp(pendulum, [t[0], t[-1]], y0, t_eval=t, method='RK45')</p>
+<h1 id="plot-t">📈 Plot θ(t)</h1>
+<p>plt.figure(figsize=(10,4))
+plt.plot(t, sol.y[0])
+plt.title("θ(t) - Forced Damped Pendulum")
+plt.xlabel("Time")
+plt.ylabel("Angle (rad)")
+plt.grid()
+plt.show()</p>
+<h1 id="phase-space-plot">🔁 Phase Space Plot</h1>
+<p>plt.figure(figsize=(6,6))
+plt.plot(sol.y[0], sol.y[1], lw=0.5)
+plt.title("Phase Portrait: θ vs ω")
+plt.xlabel("θ (rad)")
+plt.ylabel("Angular Velocity ω (rad/s)")
+plt.grid()
+plt.show()</p>
+<h1 id="poincare-section">📍 Poincaré Section</h1>
+<p>T = 2 * np.pi / omega
+poincare_t = np.arange(0, 100, T)
+points = []</p>
+<p>for ti in poincare_t:
+    idx = np.abs(t - ti).argmin()
+    points.append([sol.y[0][idx], sol.y[1][idx]])</p>
+<p>points = np.array(points)</p>
+<p>plt.figure(figsize=(6,6))
+plt.plot(points[:,0], points[:,1], 'o', ms=2)
+plt.title("Poincaré Section")
+plt.xlabel("θ (rad)")
+plt.ylabel("ω (rad/s)")
+plt.grid()
+plt.show()</p>
+<h1 id="bifurcation-diagram">📉 Bifurcation Diagram</h1>
+<p>A_vals = np.linspace(1.0, 1.5, 100)
+bifurcation = []</p>
+<p>for A_val in A_vals:
+    def pend(t, y):
+        theta, v = y
+        return [v, -gamma * v - omega0**2 * np.sin(theta) + A_val * np.cos(omega * t)]</p>
+<pre><code>sol = solve_ivp(pend, [0, 300], [0.1, 0.0], t_eval=np.linspace(0, 300, 10000))
+T_drive = 2 * np.pi / omega
+sampled = []
+
+for ti in np.arange(200, 300, T_drive):
+    idx = np.abs(sol.t - ti).argmin()
+    sampled.append(sol.y[0][idx] % (2*np.pi))
+
+bifurcation.append(sampled)
+</code></pre>
+<h1 id="plot-bifurcation-diagram">📊 Plot Bifurcation Diagram</h1>
+<p>plt.figure(figsize=(10,6))
+for i, sampled in enumerate(bifurcation):
+    A_val = A_vals[i]
+    plt.plot([A_val]*len(sampled), sampled, 'k.', ms=0.5)</p>
+<p>plt.title("Bifurcation Diagram: θ (mod 2π) vs A")
+plt.xlabel("Driving Amplitude A")
+plt.ylabel("θ (mod 2π)")
+plt.grid()
+plt.show()</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
