@@ -6,15 +6,15 @@ Projectile motion is a type of two-dimensional motion where an object is launche
 ### **1.1 Equations of Motion**
 The horizontal and vertical components of the initial velocity are:
 
-$$v_{0x} = v_0 \cos(\theta)$$ 
+$v_{0x} = v_0 \cos(\theta)$ 
 
-$$v_{0y} = v_0 \sin(\theta)$$
+$v_{0y} = v_0 \sin(\theta)$
 
 Using the kinematic equations, the motion in each direction is governed by:
 - **Horizontal motion (constant velocity, no acceleration in the ideal case):**
-  $$x = v_{0x} t = v_0 \cos(\theta) t$$
+  $x = v_{0x} t = v_0 \cos(\theta) t$
 - **Vertical motion (accelerated due to gravity):**
-  $$y = v_{0y} t - \frac{1}{2} g t^2$$
+  $y = v_{0y} t - \frac{1}{2} g t^2$
 
 where:
 
@@ -24,20 +24,20 @@ where:
 ### **1.2 Time of Flight**
 
 The time of flight is determined by solving for when the projectile returns to the ground $(y = 0)$:
-$$t = \frac{2 v_0 \sin(\theta)}{g}$$
+$t = \frac{2 v_0 \sin(\theta)}{g}$
 
 ### **1.3 Range Equation**
-The range $$R$$ is the horizontal distance traveled when the projectile lands:
-$$R = v_{0x} \cdot t = v_0 \cos(\theta) \cdot \frac{2 v_0 \sin(\theta)}{g}$$
+The range $R$ is the horizontal distance traveled when the projectile lands:
+$R = v_{0x} \cdot t = v_0 \cos(\theta) \cdot \frac{2 v_0 \sin(\theta)}{g}$
 
-Using the identity $$2 \sin(\theta) \cos(\theta) = \sin(2\theta)$$, we get:
-$$R = \frac{v_0^2 \sin(2\theta)}{g}$$
+Using the identity $2 \sin(\theta) \cos(\theta) = \sin(2\theta)$, we get:
+$R = \frac{v_0^2 \sin(2\theta)}{g}$
 
 ## **2. Analysis of the Range**
 
-- The range is maximized when $$\sin(2\theta) = 1$$, which occurs at $$2\theta = 90^\circ$$, or $$\theta = 45^\circ$$.
-- If the initial velocity $$v_0$$ increases, the range increases quadratically.
-- If gravity $$g$$ increases (e.g., on another planet), the range decreases.
+- The range is maximized when $\sin(2\theta) = 1$, which occurs at $2\theta = 90^\circ$, or $\theta = 45^\circ$.
+- If the initial velocity $v_0$ increases, the range increases quadratically.
+- If gravity $g$ increases (e.g., on another planet), the range decreases.
 
 ## **3. Practical Applications**
 
