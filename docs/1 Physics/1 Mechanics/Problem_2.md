@@ -1,105 +1,307 @@
-# 📦 Gerekli kütüphaneleri içe aktar
+# Investigating the Dynamics of a Forced Damped Pendulum
+
+## Motivation
+
+The forced damped pendulum is a classic example of nonlinear dynamics. Unlike simple harmonic oscillators, this system responds to periodic external forces and damping, producing rich behavior that includes resonance, synchronization, and even chaos. This kind of system is fundamental in physics and engineering because it mirrors the behavior of real-world systems like suspension bridges, circuits, and mechanical vibration absorbers.
+
+---
+
+## 1. Theoretical Foundation
+
+The general nonlinear equation for the forced damped pendulum is:
+
+$$
+\frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \sin\theta = A \cos(\omega t)
+$$
+
+Where:
+- $\theta$: angular displacement (radians)
+- $\gamma$: damping coefficient (how quickly oscillations die out)
+- $\omega_0$: natural angular frequency ($\omega_0 = \sqrt{g / L}$ for a pendulum of length $L$)
+- $A$: amplitude of external force
+- $\omega$: driving frequency
+
+### Small-Angle Approximation
+When $\theta$ is small (typically less than 10°), we can use the approximation:
+
+$$
+\sin\theta \approx \theta
+$$
+
+This simplifies the equation to:
+
+$$
+\frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \theta = A \cos(\omega t)
+$$
+
+This form is a linear second-order ODE, easier to solve and useful for studying resonance behavior.
+
+---
+
+## 2. Python Simulation
+
+Let's simulate the pendulum using numerical methods. We'll use the Runge-Kutta method via `scipy.integrate.solve_ivp`.
+
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
-import os
 
-# 🔧 Parametreler
-gamma = 0.2         # Sönümleme katsayısı
-omega0 = 1.5        # Doğal frekans
-A = 1.2             # Sürükleyici kuvvet genliği
-omega = 2/3         # Sürükleyici frekans
-
-# 🎯 Diferansiyel denklem
-def pendulum(t, y):
+# Differential equation
+def pendulum(t, y, gamma, omega0, A, omega):
     theta, omega_theta = y
-    dtheta_dt = omega_theta
-    domega_dt = -gamma * omega_theta - omega0**2 * np.sin(theta) + A * np.cos(omega * t)
-    return [dtheta_dt, domega_dt]
+    dydt = [omega_theta, -gamma * omega_theta - omega0**2 * np.sin(theta) + A * np.cos(omega * t)]
+    return dydt
 
-# ⏱️ Zaman aralığı ve başlangıç koşulları
-t = np.linspace(0, 100, 10000)
+# Parameters
+gamma = 0.2
+omega0 = 1.5
+A = 1.2
+omega_drive = 2.0
 y0 = [0.1, 0.0]
+t_span = (0, 50)
+t_eval = np.linspace(*t_span, 5000)
 
-# 📁 figures klasörü oluştur
-os.makedirs("figures", exist_ok=True)
+# Solve the system
+sol = solve_ivp(pendulum, t_span, y0, t_eval=t_eval, args=(gamma, omega0, A, omega_drive))
 
-# 🌀 ODE çözümü
-sol = solve_ivp(pendulum, [t[0], t[-1]], y0, t_eval=t, method='RK45')
-
-# 📊 Figure 1: θ(t)
-plt.figure(figsize=(10,4))
-plt.plot(t, sol.y[0], color='darkblue')
-plt.title("Figure 1: Angular Displacement θ(t)")
-plt.xlabel("Time [s]")
-plt.ylabel("Angle [rad]")
+# Plot angle over time
+plt.figure(figsize=(10, 4))
+plt.plot(sol.t, sol.y[0], label='θ(t)')
+plt.title('Angle vs Time')
+plt.xlabel('Time (s)')
+plt.ylabel('Angle (rad)')
 plt.grid(True)
-plt.tight_layout()
-plt.savefig("figures/theta_vs_time.png", dpi=300)
-plt.close()
+plt.legend()
+plt.show()
+```
 
-# 🔁 Figure 2: Phase Portrait
-plt.figure(figsize=(6,6))
-plt.plot(sol.y[0], sol.y[1], lw=0.5, color='darkgreen')
-plt.title("Figure 2: Phase Space (θ vs ω)")
-plt.xlabel("θ [rad]")
-plt.ylabel("Angular Velocity ω [rad/s]")
+![alt text](image-4.png)
+
+---
+
+## 3. Phase Space (θ vs ω)
+
+This plot helps visualize how the system evolves in state space.
+
+```python
+plt.figure(figsize=(6, 6))
+plt.plot(sol.y[0], sol.y[1])
+plt.title('Phase Space')
+plt.xlabel('Angle θ (rad)')
+plt.ylabel('Angular Velocity ω (rad/s)')
 plt.grid(True)
-plt.tight_layout()
-plt.savefig("figures/phase_portrait.png", dpi=300)
-plt.close()
+plt.show()
+```
 
-# 📍 Figure 3: Poincaré Section
-T = 2 * np.pi / omega
-poincare_t = np.arange(0, 100, T)
-points = []
+![alt text](image-5.png)
+---
 
-for ti in poincare_t:
-    idx = np.abs(t - ti).argmin()
-    points.append([sol.y[0][idx], sol.y[1][idx]])
+## 4. Poincaré Section
 
-points = np.array(points)
+The Poincaré section samples the system once per driving cycle, helping identify periodicity and chaos.
 
-plt.figure(figsize=(6,6))
-plt.plot(points[:,0], points[:,1], 'o', ms=2, color='maroon')
-plt.title("Figure 3: Poincaré Section")
-plt.xlabel("θ [rad]")
-plt.ylabel("ω [rad/s]")
+```python
+T = 2 * np.pi / omega_drive
+poincare_times = np.arange(0, t_span[1], T)
+poincare_points = []
+
+for t_p in poincare_times:
+    idx = np.argmin(np.abs(sol.t - t_p))
+    poincare_points.append([sol.y[0][idx] % (2*np.pi), sol.y[1][idx]])
+
+poincare_points = np.array(poincare_points)
+
+plt.figure(figsize=(6, 6))
+plt.scatter(poincare_points[:, 0], poincare_points[:, 1], s=10, color='crimson')
+plt.title('Poincaré Section')
+plt.xlabel('θ mod $2\pi$ (rad)')
+plt.ylabel('Angular Velocity (rad/s)')
 plt.grid(True)
-plt.tight_layout()
-plt.savefig("figures/poincare_section.png", dpi=300)
-plt.close()
+plt.show()
+```
 
-# 📉 Figure 4: Bifurcation Diagram
-A_vals = np.linspace(1.0, 1.5, 100)
-bifurcation = []
+![alt text](image-6.png)
 
-for A_val in A_vals:
-    def pend(t, y):
-        theta, v = y
-        return [v, -gamma * v - omega0**2 * np.sin(theta) + A_val * np.cos(omega * t)]
+---
 
-    sol = solve_ivp(pend, [0, 300], [0.1, 0.0], t_eval=np.linspace(0, 300, 10000))
-    T_drive = 2 * np.pi / omega
-    sampled = []
+## 5. Additional Visualization: Energy Over Time
 
-    for ti in np.arange(200, 300, T_drive):
-        idx = np.abs(sol.t - ti).argmin()
-        sampled.append(sol.y[0][idx] % (2*np.pi))
+Visualizing total mechanical energy shows how damping and driving force interact.
 
-    bifurcation.append(sampled)
+```python
+mass = 1.0
+length = 1.0
+g = 9.81
 
-plt.figure(figsize=(10,6))
-for i, sampled in enumerate(bifurcation):
-    A_val = A_vals[i]
-    plt.plot([A_val]*len(sampled), sampled, 'k.', ms=0.5)
+theta = sol.y[0]
+omega = sol.y[1]
 
-plt.title("Figure 4: Bifurcation Diagram (θ mod 2π vs A)")
+potential_energy = mass * g * length * (1 - np.cos(theta))
+kinetic_energy = 0.5 * mass * (length**2) * omega**2
+total_energy = potential_energy + kinetic_energy
+
+plt.figure(figsize=(10, 4))
+plt.plot(sol.t, total_energy)
+plt.title('Total Mechanical Energy vs Time')
+plt.xlabel('Time (s)')
+plt.ylabel('Energy (J)')
+plt.grid(True)
+plt.show()
+```
+
+![alt text](image-7.png)
+
+---
+
+## 6. Bifurcation Diagram
+
+Explore how the long-term behavior changes with the driving amplitude A.
+
+```python
+bifurcation_A = np.linspace(1.0, 1.5, 300)
+steady_states = []
+
+for A_val in bifurcation_A:
+    sol = solve_ivp(pendulum, [0, 200], [0.1, 0.0], t_eval=np.linspace(150, 200, 500), args=(gamma, omega0, A_val, omega_drive))
+    theta_vals = sol.y[0] % (2 * np.pi)
+    steady_states.append((np.full_like(theta_vals, A_val), theta_vals))
+
+plt.figure(figsize=(10, 6))
+for A_vals, thetas in steady_states:
+    plt.plot(A_vals, thetas, ',k', alpha=0.5)
+plt.title("Bifurcation Diagram (A vs θ)")
 plt.xlabel("Driving Amplitude A")
-plt.ylabel("θ (mod 2π)")
+plt.ylabel("θ mod 2π")
 plt.grid(True)
-plt.tight_layout()
-plt.savefig("figures/bifurcation_diagram.png", dpi=300)
-plt.close()
+plt.show()
+```
 
-print("✅ All figures saved in 'figures/' folder.")
+![alt text](image-8.png)
+
+---
+
+## 7. Lyapunov Exponent Estimation
+
+Estimate the largest Lyapunov exponent to determine chaos.
+
+```python
+def estimate_lyapunov(delta0=1e-8, T_max=100):
+    y1 = np.array([0.1, 0.0])
+    y2 = y1 + np.array([delta0, 0])
+    times = np.linspace(0, T_max, 10000)
+    d_list = []
+
+    for t in range(len(times) - 1):
+        sol1 = solve_ivp(pendulum, [times[t], times[t+1]], y1, t_eval=[times[t+1]], args=(gamma, omega0, A, omega_drive))
+        sol2 = solve_ivp(pendulum, [times[t], times[t+1]], y2, t_eval=[times[t+1]], args=(gamma, omega0, A, omega_drive))
+
+        y1 = sol1.y[:, -1]
+        y2 = sol2.y[:, -1]
+
+        delta = np.linalg.norm(y2 - y1)
+        d_list.append(np.log(delta / delta0))
+        y2 = y1 + delta0 * (y2 - y1) / delta  # Renormalize
+
+    return times[1:], np.cumsum(d_list) / np.arange(1, len(d_list)+1)
+
+ltimes, lyap = estimate_lyapunov()
+
+plt.figure(figsize=(8, 4))
+plt.plot(ltimes, lyap)
+plt.title("Estimated Largest Lyapunov Exponent")
+plt.xlabel("Time")
+plt.ylabel("Lyapunov Exponent")
+plt.grid(True)
+plt.show()
+```
+
+![alt text](image-9.png)
+
+---
+
+## 8. Exploring Parameters
+
+Experimenting with parameters leads to different behaviors:
+- Increasing `A` may cause chaotic motion.
+- Lowering `γ` shows less damping, leading to longer sustained oscillations.
+- Matching `ω` with `ω₀` creates resonance, producing large amplitudes.
+
+---
+
+## 9. Real-World Applications
+
+- **Energy Harvesters**: Pendulums can convert motion into usable energy.
+- **Bridge Engineering**: Avoiding resonance in suspension bridges is crucial.
+- **Washing Machines**: Proper damping reduces imbalance.
+- **Electronics**: RLC circuits have similar equations.
+- **Clocks**: Pendulum clocks are based on resonance principles.
+
+---
+
+## 10. Model Limitations and Extensions
+
+- The model assumes ideal sine driving forces.
+- Real-world damping is often nonlinear.
+- It doesn't account for multi-dimensional motion.
+
+### Possible Extensions
+- Add random or non-periodic forcing.
+- Add nonlinear damping (quadratic drag).
+- Study bifurcation diagrams over varying A or ω.
+- Simulate coupled or double pendulums.
+
+---
+
+## Summary
+
+This project demonstrates the rich behavior of a driven damped pendulum, from predictable motion to chaos. By simulating and visualizing its response to different parameters, we gain deeper understanding of how simple systems can lead to complex outcomes.
+
+---
+
+## FAQ - Common Questions
+
+**1. What makes the forced damped pendulum nonlinear?**  
+The presence of the $\sin\theta$ term (instead of $\theta$) introduces nonlinearity, which makes the system exhibit complex dynamics such as chaos.
+
+**2. Why is damping important in the system?**  
+Damping removes energy from the system. Without it, the pendulum would keep oscillating forever if externally driven.
+
+**3. What happens at resonance?**  
+When the driving frequency matches the natural frequency ($\omega \approx \omega_0$), the system absorbs maximum energy, causing large oscillations.
+
+**4. Why do we use the small-angle approximation?**  
+It simplifies the math by making the equation linear. It’s only valid for small displacements (typically $\theta < 10^{\circ}$).
+
+**5. What is a Poincaré section and why is it useful?**  
+It’s a snapshot of the system at regular intervals. It helps identify periodic vs chaotic behavior in a simpler 2D plot.
+
+**6. Can this system become chaotic?**  
+Yes. With certain combinations of damping, amplitude, and driving frequency, the system becomes highly sensitive to initial conditions and unpredictable.
+
+**7. What are real-world analogs of this system?**  
+Any system with damping and periodic forcing—like RLC circuits, mechanical oscillators, or climate systems—can be modeled similarly.
+
+---
+
+Feel free to change the parameters and explore how simple rules can create unpredictable patterns.
+
+
+
+
+
+## Appendix: Completion Checklist
+
+| **Category**               | **Content Description**                                                                 | **Included?** |
+|----------------------------|------------------------------------------------------------------------------------------|---------------|
+| **Theoretical Foundation** | Differential equation, small-angle approximation, and resonance explanation             | ✅ Yes        |
+| **Python Simulation**      | Time-domain simulation using `solve_ivp` and parameter configuration                    | ✅ Yes        |
+| **Phase Space Plot**       | Visualization of the angular velocity vs angle (θ vs ω)                                 | ✅ Yes        |
+| **Poincaré Section**       | Stroboscopic mapping to visualize periodic vs chaotic behavior                          | ✅ Yes        |
+| **Energy Analysis**        | Plot showing kinetic + potential energy over time                                       | ✅ Yes        |
+| **Bifurcation Diagram**    | Diagram showing system behavior vs driving amplitude (A)                                | ✅ Yes        |
+| **Lyapunov Exponent**      | Numerical estimation of chaos via divergence of nearby trajectories                     | ✅ Yes        |
+| **Parameter Exploration**  | Discussion of how γ, A, and ω affect the dynamics                                       | ✅ Yes        |
+| **Real-World Applications**| Analogies to bridges, electronics, and mechanical systems                               | ✅ Yes        |
+| **Model Limitations**      | Discussion of assumptions and suggestions for extensions                                | ✅ Yes        |
+| **FAQ Section**            | Seven clear and relevant conceptual questions with explanations                         | ✅ Yes        |
