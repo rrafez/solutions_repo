@@ -82,12 +82,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#faq-common-questions">FAQ - Common Questions</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#appendix-completion-checklist">Appendix: Completion Checklist</a>
-</li>
 </ul>
 </li>
 </ul>
@@ -409,94 +403,6 @@ plt.show()
 <li>Study bifurcation diagrams over varying A or ω.</li>
 <li>Simulate coupled or double pendulums.</li>
 </ul>
-<hr/>
-<h2 id="summary">Summary</h2>
-<p>This project demonstrates the rich behavior of a driven damped pendulum, from predictable motion to chaos. By simulating and visualizing its response to different parameters, we gain deeper understanding of how simple systems can lead to complex outcomes.</p>
-<hr/>
-<h2 id="faq-common-questions">FAQ - Common Questions</h2>
-<p><strong>1. What makes the forced damped pendulum nonlinear?</strong><br/>
-The presence of the <span class="arithmatex">\(\sin\theta\)</span> term (instead of <span class="arithmatex">\(\theta\)</span>) introduces nonlinearity, which makes the system exhibit complex dynamics such as chaos.</p>
-<p><strong>2. Why is damping important in the system?</strong><br/>
-Damping removes energy from the system. Without it, the pendulum would keep oscillating forever if externally driven.</p>
-<p><strong>3. What happens at resonance?</strong><br/>
-When the driving frequency matches the natural frequency (<span class="arithmatex">\(\omega \approx \omega_0\)</span>), the system absorbs maximum energy, causing large oscillations.</p>
-<p><strong>4. Why do we use the small-angle approximation?</strong><br/>
-It simplifies the math by making the equation linear. It’s only valid for small displacements (typically <span class="arithmatex">\(\theta &lt; 10^{\circ}\)</span>).</p>
-<p><strong>5. What is a Poincaré section and why is it useful?</strong><br/>
-It’s a snapshot of the system at regular intervals. It helps identify periodic vs chaotic behavior in a simpler 2D plot.</p>
-<p><strong>6. Can this system become chaotic?</strong><br/>
-Yes. With certain combinations of damping, amplitude, and driving frequency, the system becomes highly sensitive to initial conditions and unpredictable.</p>
-<p><strong>7. What are real-world analogs of this system?</strong><br/>
-Any system with damping and periodic forcing—like RLC circuits, mechanical oscillators, or climate systems—can be modeled similarly.</p>
-<hr/>
-<p>Feel free to change the parameters and explore how simple rules can create unpredictable patterns.</p>
-<h2 id="appendix-completion-checklist">Appendix: Completion Checklist</h2>
-<table>
-<thead>
-<tr>
-<th><strong>Category</strong></th>
-<th><strong>Content Description</strong></th>
-<th><strong>Included?</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Theoretical Foundation</strong></td>
-<td>Differential equation, small-angle approximation, and resonance explanation</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Python Simulation</strong></td>
-<td>Time-domain simulation using <code>solve_ivp</code> and parameter configuration</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Phase Space Plot</strong></td>
-<td>Visualization of the angular velocity vs angle (θ vs ω)</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Poincaré Section</strong></td>
-<td>Stroboscopic mapping to visualize periodic vs chaotic behavior</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Energy Analysis</strong></td>
-<td>Plot showing kinetic + potential energy over time</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Bifurcation Diagram</strong></td>
-<td>Diagram showing system behavior vs driving amplitude (A)</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Lyapunov Exponent</strong></td>
-<td>Numerical estimation of chaos via divergence of nearby trajectories</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Parameter Exploration</strong></td>
-<td>Discussion of how γ, A, and ω affect the dynamics</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Real-World Applications</strong></td>
-<td>Analogies to bridges, electronics, and mechanical systems</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>Model Limitations</strong></td>
-<td>Discussion of assumptions and suggestions for extensions</td>
-<td>✅ Yes</td>
-</tr>
-<tr>
-<td><strong>FAQ Section</strong></td>
-<td>Seven clear and relevant conceptual questions with explanations</td>
-<td>✅ Yes</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
