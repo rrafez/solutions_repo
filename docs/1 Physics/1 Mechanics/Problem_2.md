@@ -1,51 +1,53 @@
-# 🌀 Investigating the Dynamics of a Forced Damped Pendulum
+# 🧪 Investigating the Dynamics of a Forced Damped Pendulum
 
 ## 🎯 Motivation
 
-The **forced damped pendulum** is a classical nonlinear system that exhibits rich dynamics due to the interaction of damping, restoring forces, and external periodic driving. As system parameters vary, the motion can transition from simple periodic motion to chaotic behavior.
+The **forced damped pendulum** is a classical nonlinear system that exhibits rich dynamics due to the interaction of damping, restoring forces, and external periodic driving. As system parameters vary, the motion can transition from simple periodic oscillations to complex chaotic motion.
 
 Understanding this system provides insights into:
-- Mechanical resonance
-- Vibration control in structures
-- Electrical analogs (RLC circuits)
-- Energy harvesting and biomechanical systems
+- Mechanical systems (e.g., suspension bridges, engines)
+- Electrical analogs (e.g., RLC circuits)
+- Human motion (e.g., walking gait)
+- Energy harvesting mechanisms
+
+It bridges the gap between simple harmonic motion and real-world nonlinear systems.
 
 ---
 
-## 🧠 1. Theoretical Foundation
+## 🧠 1. Theoretical Background
 
-### ⚙️ Governing Equation
-
-The motion of a forced damped pendulum is governed by:
+### ⚙️ Equation of Motion
 
 \[
 \frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \sin(\theta) = A \cos(\omega t)
 \]
 
 Where:
-- \(\theta(t)\): Angular displacement
-- \(\gamma\): Damping coefficient
-- \(\omega_0 = \sqrt{\frac{g}{L}}\): Natural frequency
-- \(A\): Driving force amplitude
+- \(\theta\): Angular displacement  
+- \(\gamma\): Damping coefficient  
+- \(\omega_0 = \sqrt{\frac{g}{L}}\): Natural frequency  
+- \(A\): Driving amplitude  
 - \(\omega\): Driving frequency
 
 ---
 
-### 🧪 Small-Angle Approximation
+### 🔎 Small-Angle Approximation
 
-When \(|\theta|\) is small: \(\sin(\theta) \approx \theta\), giving the linearized form:
+For small angles, we can linearize the equation:
 
 \[
+\sin(\theta) \approx \theta
+\Rightarrow
 \frac{d^2\theta}{dt^2} + \gamma \frac{d\theta}{dt} + \omega_0^2 \theta = A \cos(\omega t)
 \]
 
-This is the equation of a **driven damped harmonic oscillator**.
+This is the standard form of the **driven damped harmonic oscillator**.
 
 ---
 
-### 📐 Approximate Solution (Linear Case)
+### 📈 Analytical Steady-State Solution (Linear Case)
 
-Assuming a solution:
+Assuming a solution of the form:
 
 \[
 \theta(t) = \theta_0 \cos(\omega t - \phi)
@@ -54,36 +56,37 @@ Assuming a solution:
 We find:
 
 \[
-\theta_0 = \frac{A}{\sqrt{(\omega_0^2 - \omega^2)^2 + (\gamma \omega)^2}}, \quad
+\theta_0 = \frac{A}{\sqrt{(\omega_0^2 - \omega^2)^2 + (\gamma \omega)^2}},
+\quad
 \tan(\phi) = \frac{\gamma \omega}{\omega_0^2 - \omega^2}
 \]
 
 ---
 
-### 🔊 Resonance
+### 📌 Resonance
 
-Resonance occurs near:
+Resonance occurs when the driving frequency matches the system's natural frequency:
 
 \[
 \omega_{\text{res}} \approx \sqrt{\omega_0^2 - \frac{\gamma^2}{2}}
 \]
 
-At this frequency, the amplitude reaches a maximum, especially when damping is low.
+At resonance, the system absorbs energy efficiently, resulting in large oscillations.
 
 ---
 
 ## 💻 2. Python Simulation and Analysis
 
 ```python
-# 📦 Import required libraries
+# 📦 Required Libraries
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 
-# 🔧 Parameters
+# ⚙️ Parameters
 gamma = 0.2         # Damping coefficient
 omega0 = 1.5        # Natural frequency
-A = 1.2             # Driving amplitude
+A = 1.2             # Driving force amplitude
 omega = 2/3         # Driving frequency
 
 # 🧮 Define the differential equation
@@ -93,28 +96,28 @@ def pendulum(t, y):
     domega_dt = -gamma * omega_theta - omega0**2 * np.sin(theta) + A * np.cos(omega * t)
     return [dtheta_dt, domega_dt]
 
-# ⏱️ Time span and initial conditions
+# ⏱️ Time and initial conditions
 t = np.linspace(0, 100, 10000)
-y0 = [0.1, 0.0]  # Initial angle and angular velocity
+y0 = [0.1, 0.0]  # initial angle and angular velocity
 
-# 🌀 Solve the ODE
+# 🌀 Numerical integration using Runge-Kutta method
 sol = solve_ivp(pendulum, [t[0], t[-1]], y0, t_eval=t, method='RK45')
 
-# 📈 Plot θ(t)
+# 📊 Plot θ(t)
 plt.figure(figsize=(10,4))
 plt.plot(t, sol.y[0])
-plt.title("θ(t) - Forced Damped Pendulum")
-plt.xlabel("Time")
-plt.ylabel("Angle (rad)")
+plt.title("Angular Displacement θ(t)")
+plt.xlabel("Time [s]")
+plt.ylabel("Angle [rad]")
 plt.grid()
 plt.show()
 
-# 🔁 Phase Space Plot
+# 🔁 Phase Space Plot: θ vs ω
 plt.figure(figsize=(6,6))
 plt.plot(sol.y[0], sol.y[1], lw=0.5)
-plt.title("Phase Portrait: θ vs ω")
-plt.xlabel("θ (rad)")
-plt.ylabel("Angular Velocity ω (rad/s)")
+plt.title("Phase Space: θ vs ω")
+plt.xlabel("θ [rad]")
+plt.ylabel("Angular Velocity ω [rad/s]")
 plt.grid()
 plt.show()
 
@@ -132,8 +135,8 @@ points = np.array(points)
 plt.figure(figsize=(6,6))
 plt.plot(points[:,0], points[:,1], 'o', ms=2)
 plt.title("Poincaré Section")
-plt.xlabel("θ (rad)")
-plt.ylabel("ω (rad/s)")
+plt.xlabel("θ [rad]")
+plt.ylabel("ω [rad/s]")
 plt.grid()
 plt.show()
 
@@ -156,13 +159,13 @@ for A_val in A_vals:
 
     bifurcation.append(sampled)
 
-# 📊 Plot Bifurcation Diagram
+# 📈 Plot Bifurcation Diagram
 plt.figure(figsize=(10,6))
 for i, sampled in enumerate(bifurcation):
     A_val = A_vals[i]
     plt.plot([A_val]*len(sampled), sampled, 'k.', ms=0.5)
 
-plt.title("Bifurcation Diagram: θ (mod 2π) vs A")
+plt.title("Bifurcation Diagram: θ(mod 2π) vs Driving Amplitude A")
 plt.xlabel("Driving Amplitude A")
 plt.ylabel("θ (mod 2π)")
 plt.grid()
