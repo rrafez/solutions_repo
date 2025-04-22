@@ -229,6 +229,72 @@ Experimenting with parameters leads to different behaviors:
 
 ---
 
+## 🔄 Extended Visualization: Adding Forced but Undamped Pendulum
+
+This scenario demonstrates periodic motion with sustained energy input and no damping, resulting in regular oscillations without energy loss — a resonance-friendly setup.
+
+
+We now add the **fourth** scenario that was previously missing:
+
+| Case                         | Damping ($b$) | Forcing ($A$) |
+|------------------------------|---------------|----------------|
+| Simple Pendulum              | 0             | 0              |
+| Damped Pendulum              | 0.5           | 0              |
+| Forced Damped Pendulum       | 0.5           | 1.2            |
+| **Forced (Undamped) Pendulum** | **0**         | **1.2**        ✅ _NEW_
+
+This configuration shows how the system behaves when it's **driven** but has **no energy loss** – a potentially resonant and unstable regime.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+g = 9.81
+L = 1.0
+omega0 = np.sqrt(g / L)
+theta0 = 0.2
+omega_init = 0.0
+t_span = (0, 30)
+t_eval = np.linspace(*t_span, 5000)
+
+def pendulum_system(t, y, gamma, A, omega_drive):
+    theta, omega = y
+    dtheta_dt = omega
+    domega_dt = -gamma * omega - omega0**2 * np.sin(theta) + A * np.cos(omega_drive * t)
+    return [dtheta_dt, domega_dt]
+
+gamma_forced_undamped = 0.0
+A_forced = 1.2
+omega_drive = 2.0
+
+sol_forced_undamped = solve_ivp(pendulum_system, t_span, [theta0, omega_init],
+                                 t_eval=t_eval, args=(gamma_forced_undamped, A_forced, omega_drive))
+
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(sol_forced_undamped.t, sol_forced_undamped.y[0])
+plt.title("Forced (Undamped) Pendulum: Angle vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Angle $\\theta$ (rad)")
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.plot(sol_forced_undamped.y[0], sol_forced_undamped.y[1])
+plt.title("Forced (Undamped) Pendulum: Phase Space")
+plt.xlabel("Angle $\\theta$ (rad)")
+plt.ylabel("Angular Velocity $\\omega$ (rad/s)")
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+![alt text](image-12.png)
+
+
+
 ## 9. Real-World Applications
 
 - **Energy Harvesters**: Pendulums can convert motion into usable energy.
@@ -251,3 +317,76 @@ Experimenting with parameters leads to different behaviors:
 - Study bifurcation diagrams over varying A or ω.
 - Simulate coupled or double pendulums.
 
+---
+
+To fully illustrate the transition from simple to complex dynamics, we add simulations for:
+
+1. Simple Pendulum (no damping, no forcing)  
+2. Damped Pendulum (with damping, no forcing)  
+3. Forced Damped Pendulum (already shown above)
+
+We simulate and visualize angle-time plots and phase diagrams for the first two to complete the progression.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+g = 9.81
+L = 1.0
+omega0 = np.sqrt(g / L)
+theta0 = 0.2
+omega_init = 0.0
+t_span = (0, 30)
+t_eval = np.linspace(*t_span, 5000)
+
+def pendulum_system(t, y, gamma, A, omega_drive):
+    theta, omega = y
+    dtheta_dt = omega
+    domega_dt = -gamma * omega - omega0**2 * np.sin(theta) + A * np.cos(omega_drive * t)
+    return [dtheta_dt, domega_dt]
+
+sol_simple = solve_ivp(pendulum_system, t_span, [theta0, omega_init],
+                       t_eval=t_eval, args=(0.0, 0.0, 0.0))
+
+sol_damped = solve_ivp(pendulum_system, t_span, [theta0, omega_init],
+                       t_eval=t_eval, args=(0.5, 0.0, 0.0))
+
+plt.figure(figsize=(14, 10))
+
+plt.subplot(2, 2, 1)
+plt.plot(sol_simple.t, sol_simple.y[0])
+plt.title("Simple Pendulum: Angle vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Angle $\\theta$ (rad)")
+plt.grid(True)
+
+plt.subplot(2, 2, 2)
+plt.plot(sol_simple.y[0], sol_simple.y[1])
+plt.title("Simple Pendulum: Phase Space")
+plt.xlabel("Angle $\\theta$ (rad)")
+plt.ylabel("Angular Velocity $\\omega$ (rad/s)")
+plt.grid(True)
+
+plt.subplot(2, 2, 3)
+plt.plot(sol_damped.t, sol_damped.y[0])
+plt.title("Damped Pendulum: Angle vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Angle $\\theta$ (rad)")
+plt.grid(True)
+
+plt.subplot(2, 2, 4)
+plt.plot(sol_damped.y[0], sol_damped.y[1])
+plt.title("Damped Pendulum: Phase Space")
+plt.xlabel("Angle $\\theta$ (rad)")
+plt.ylabel("Angular Velocity $\\omega$ (rad/s)")
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+![alt text](image-10.png)
+
+
+![alt text](image-11.png)
