@@ -260,14 +260,22 @@ plt.show()
 ## **6.3 Energy vs Radius for Earth**
 
 ```python
-U = -G * masses["Earth"] / r
-K = G * masses["Earth"] / (2*r)
-E_total = K + U
+import numpy as np
+import matplotlib.pyplot as plt
+
+G = 6.67430e-11  # m^3 kg^-1 s^-2
+M_earth = 5.972e24  # kg
+
+radii = np.linspace(6.371e6, 10e7, 500)  # 6371 km (Earth surface) to 10000 km altitude
+
+U = -G * M_earth / radii   # Gravitational Potential Energy per unit mass (J/kg)
+K = G * M_earth / (2 * radii)  # Kinetic Energy per unit mass (J/kg)
+E_total = K + U  # Total Mechanical Energy
 
 plt.figure(figsize=(10,6))
-plt.plot(r/1000, U/1e7, label='Potential Energy (x10⁷ J/kg)')
-plt.plot(r/1000, K/1e7, label='Kinetic Energy (x10⁷ J/kg)')
-plt.plot(r/1000, E_total/1e7, label='Total Energy (x10⁷ J/kg)')
+plt.plot(radii/1000, U/1e7, label='Potential Energy (x10⁷ J/kg)')
+plt.plot(radii/1000, K/1e7, label='Kinetic Energy (x10⁷ J/kg)')
+plt.plot(radii/1000, E_total/1e7, label='Total Energy (x10⁷ J/kg)')
 plt.xlabel('Radius (km)')
 plt.ylabel('Energy (J/kg)')
 plt.title('Energy vs Radius for Earth')
@@ -275,6 +283,8 @@ plt.legend()
 plt.grid()
 plt.show()
 ```
+
+![alt text](image-8.png)
 
 ---
 
