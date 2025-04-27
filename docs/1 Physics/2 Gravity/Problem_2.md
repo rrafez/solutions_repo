@@ -133,22 +133,48 @@ We will calculate $v_1$, $v_2$, $v_3$ for:
 import numpy as np
 import matplotlib.pyplot as plt
 
-G = 6.67430e-11  # m^3 kg^-1 s^-2
+G = 6.67430e-11
 
-# Masses (kg)
 masses = {
     "Earth": 5.972e24,
     "Mars": 6.417e23,
     "Jupiter": 1.898e27
 }
 
-# Radii (m)
 radii = {
     "Earth": 6.371e6,
     "Mars": 3.3895e6,
     "Jupiter": 6.9911e7
 }
+
+v1 = {}
+v2 = {}
+
+for planet in masses:
+    r = radii[planet]
+    M = masses[planet]
+    v1[planet] = np.sqrt(G * M / r)
+    v2[planet] = np.sqrt(2 * G * M / r)
+
+planets = list(masses.keys())
+
+v1_values = [v1[p]/1000 for p in planets]
+v2_values = [v2[p]/1000 for p in planets]
+
+x = np.arange(len(planets))
+
+plt.figure(figsize=(10,6))
+plt.bar(x - 0.2, v1_values, 0.4, label='First Cosmic Velocity (v1)', color='skyblue')
+plt.bar(x + 0.2, v2_values, 0.4, label='Second Cosmic Velocity (v2)', color='salmon')
+plt.xticks(x, planets)
+plt.ylabel('Velocity (km/s)')
+plt.title('Comparison of First and Second Cosmic Velocities for Planets')
+plt.legend()
+plt.grid(axis='y')
+plt.show()
 ```
+
+![alt text](image-13.png)
 
 ---
 
@@ -169,12 +195,39 @@ for planet in masses:
 for planet in v1:
     print(f"{planet} -> v1 = {v1[planet]/1000:.2f} km/s, v2 = {v2[planet]/1000:.2f} km/s")
 ```
+![alt text](image-12.png)
 
 ---
 
 ## **5.3 Graph: v1 and v2 Comparison**
 
 ```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+G = 6.67430e-11
+
+masses = {
+    "Earth": 5.972e24,
+    "Mars": 6.417e23,
+    "Jupiter": 1.898e27
+}
+
+radii = {
+    "Earth": 6.371e6,
+    "Mars": 3.3895e6,
+    "Jupiter": 6.9911e7
+}
+
+v1 = {}
+v2 = {}
+
+for planet in masses:
+    r = radii[planet]
+    M = masses[planet]
+    v1[planet] = np.sqrt(G * M / r)
+    v2[planet] = np.sqrt(2 * G * M / r)
+
 planets = list(masses.keys())
 
 v1_values = [v1[p]/1000 for p in planets]
@@ -183,15 +236,17 @@ v2_values = [v2[p]/1000 for p in planets]
 x = np.arange(len(planets))
 
 plt.figure(figsize=(10,6))
-plt.bar(x - 0.2, v1_values, 0.4, label='First Cosmic Velocity (v1)')
-plt.bar(x + 0.2, v2_values, 0.4, label='Second Cosmic Velocity (v2)')
+plt.bar(x - 0.2, v1_values, 0.4, label='First Cosmic Velocity (v1)', color='skyblue')
+plt.bar(x + 0.2, v2_values, 0.4, label='Second Cosmic Velocity (v2)', color='salmon')
 plt.xticks(x, planets)
 plt.ylabel('Velocity (km/s)')
-plt.title('Comparison of v1 and v2 for Planets')
+plt.title('Comparison of First and Second Cosmic Velocities for Planets')
 plt.legend()
 plt.grid(axis='y')
 plt.show()
 ```
+
+![alt text](image-11.png)
 
 ---
 
@@ -223,6 +278,8 @@ plt.grid()
 plt.show()
 ```
 
+![alt text](image-10.png)
+
 ---
 
 ## **Graph 2: Velocity vs Radius (Earth)**
@@ -248,6 +305,8 @@ plt.legend()
 plt.grid()
 plt.show()
 ```
+
+![alt text](image-9.png)
 
 ---
 
