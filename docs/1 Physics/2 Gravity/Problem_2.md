@@ -1,382 +1,247 @@
-# **Gravity: Escape Velocities and Cosmic Velocities**
+# Problem 2
+
+
+# Escape Velocities and Cosmic Velocities
+
+## Motivation
+
+The concept of **escape velocity** is fundamental to understanding how an object can overcome the gravitational pull of a celestial body. Extending this idea, the definitions of the **first**, **second**, and **third cosmic velocities** describe thresholds for orbiting a planet, escaping a planet's gravity, and leaving a star system entirely.
+
+These principles are crucial for designing satellite launches, planning interplanetary missions, and imagining future interstellar travel.
 
 ---
 
-# **1. Introduction and Motivation**
+## Definitions of Cosmic Velocities
 
-The concept of **escape velocity** is crucial in space exploration:  
-- How fast must a rocket travel to leave Earth?
-- What speed is needed to orbit Earth?
-- How much faster to leave the Solar System?
-
-We define:
-- **First Cosmic Velocity**: Orbital velocity around a celestial body.
-- **Second Cosmic Velocity**: Escape velocity from a celestial body.
-- **Third Cosmic Velocity**: Escape velocity from a star system.
+- **First Cosmic Velocity ($v_1$):** The minimum velocity needed for a stable circular orbit around a planet without propulsion.
+- **Second Cosmic Velocity ($v_2$):** The escape velocity — the minimum velocity needed to break free from a celestial body's gravitational field.
+- **Third Cosmic Velocity ($v_3$):** The minimum velocity needed to escape the gravitational influence of the star (e.g., the Sun) after escaping the planet.
 
 ---
 
-# **2. Theoretical Foundation**
+## Mathematical Derivations
 
-## **2.1 Gravitational Potential Energy**
+### 1. First Cosmic Velocity ($v_1$)
 
-The gravitational potential energy ($U$) between two masses:
-
-$$
-U = -\frac{G M m}{r}
-$$
-
-where:
-- $G$ = gravitational constant,
-- $M$ = mass of central body,
-- $m$ = mass of escaping body,
-- $r$ = distance between their centers.
-
----
-
-## **2.2 Kinetic Energy**
-
-The kinetic energy ($K$) of the moving object:
+Derived by equating the gravitational force to the centripetal force needed for circular motion:
 
 $$
-K = \frac{1}{2} m v^2
+\frac{GMm}{r^2} = m \frac{v_1^2}{r}
+$$
+
+Simplifying:
+
+$$
+v_1 = \sqrt{\frac{GM}{r}}
 $$
 
 ---
 
-## **2.3 Total Mechanical Energy**
+### 2. Second Cosmic Velocity ($v_2$)
 
-Total energy ($E$) is:
-
-$$
-E = K + U
-$$
-
-For escape:
+Derived from energy conservation: kinetic energy must match gravitational potential energy.
 
 $$
-E \geq 0
-$$
-
----
-
-# **3. First, Second, and Third Cosmic Velocities**
-
-## **3.1 First Cosmic Velocity ($v_1$)**
-
-- Speed needed for **stable circular orbit** around a planet.
-- Derive by equating gravitational force and centripetal force:
-
-$$
-\frac{G M m}{r^2} = \frac{m v_1^2}{r}
-$$
-
-Simplify:
-
-$$
-v_1 = \sqrt{\frac{G M}{r}}
-$$
-
----
-
-## **3.2 Second Cosmic Velocity ($v_2$)**
-
-- Minimum speed needed to **escape** the planet's gravity.
-- Set total mechanical energy to zero:
-
-$$
-\frac{1}{2} m v_2^2 = \frac{G M m}{r}
+\frac{1}{2}mv_2^2 = \frac{GMm}{r}
 $$
 
 Thus:
 
 $$
-v_2 = \sqrt{\frac{2 G M}{r}}
-$$
-
-Notice:
-
-$$
 v_2 = \sqrt{2} v_1
 $$
 
----
-
-## **3.3 Third Cosmic Velocity ($v_3$)**
-
-- Speed needed to **escape the entire solar system** from Earth.
-- More complex, involves the Sun’s gravity and Earth's motion:
-
-Approximate:
+or
 
 $$
-v_3 \approx \sqrt{2} \times \text{orbital speed of Earth} \approx 42.1\ \text{km/s}
+v_2 = \sqrt{\frac{2GM}{r}}
 $$
 
 ---
 
-# **4. Practical Calculations for Different Planets**
+### 3. Third Cosmic Velocity ($v_3$)
 
-We will calculate $v_1$, $v_2$, $v_3$ for:
+Requires overcoming the planet's gravity and then escaping the Sun's gravity from Earth's orbit.
 
-- Earth,
-- Mars,
-- Jupiter.
+For approximate calculation:
+
+$$
+v_3 \approx \sqrt{v_2^2 + v_{esc, Sun}^2}
+$$
+
+where $v_{esc, Sun}$ is the Sun's escape velocity at the planet's orbital distance.
 
 ---
 
-# **5. Computational Modeling**
+## Python Simulation and Visualization
 
-### **5.1 Constants**
+We will compute $v_1$, $v_2$, and $v_3$ for **Earth**, **Mars**, and **Jupiter**.
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
-G = 6.67430e-11
+# Constants
+G = 6.67430e-11  # Gravitational constant, m^3 kg^-1 s^-2
+M_sun = 1.989e30  # Mass of the Sun, kg
 
-masses = {
-    "Earth": 5.972e24,
-    "Mars": 6.417e23,
-    "Jupiter": 1.898e27
+# Celestial bodies data
+bodies = {
+    'Earth': {'mass': 5.972e24, 'radius': 6371e3, 'orbital_radius': 1.496e11},
+    'Mars': {'mass': 6.417e23, 'radius': 3389.5e3, 'orbital_radius': 2.279e11},
+    'Jupiter': {'mass': 1.898e27, 'radius': 69911e3, 'orbital_radius': 7.785e11}
 }
 
-radii = {
-    "Earth": 6.371e6,
-    "Mars": 3.3895e6,
-    "Jupiter": 6.9911e7
-}
+# Function to calculate velocities
+def calculate_cosmic_velocities(mass, radius, orbital_radius):
+    v1 = np.sqrt(G * mass / radius)
+    v2 = np.sqrt(2) * v1
+    v_esc_sun = np.sqrt(2 * G * M_sun / orbital_radius)
+    v3 = np.sqrt(v2**2 + v_esc_sun**2)
+    return v1, v2, v3
 
-v1 = {}
-v2 = {}
+# Store results
+results = {}
 
-for planet in masses:
-    r = radii[planet]
-    M = masses[planet]
-    v1[planet] = np.sqrt(G * M / r)
-    v2[planet] = np.sqrt(2 * G * M / r)
+for body, data in bodies.items():
+    v1, v2, v3 = calculate_cosmic_velocities(data['mass'], data['radius'], data['orbital_radius'])
+    results[body] = {'mass': data['mass'], 'v1': v1, 'v2': v2, 'v3': v3}
 
-planets = list(masses.keys())
+# Display results
+for body, velocities in results.items():
+    print(f"{body}: v1 = {velocities['v1']:.2f} m/s, v2 = {velocities['v2']:.2f} m/s, v3 = {velocities['v3']:.2f} m/s")
+```
+>> Earth: v1 = 7909.68 m/s, v2 = 11185.98 m/s, v3 = 43587.65 m/s
 
-v1_values = [v1[p]/1000 for p in planets]
-v2_values = [v2[p]/1000 for p in planets]
+>> Mars: v1 = 3554.68 m/s, v2 = 5027.08 m/s, v3 = 34500.32 m/s
 
-x = np.arange(len(planets))
+>> Jupiter: v1 = 42567.51 m/s, v2 = 60199.54 m/s, v3 = 62968.49 m/s
 
-plt.figure(figsize=(10,6))
-plt.bar(x - 0.2, v1_values, 0.4, label='First Cosmic Velocity (v1)', color='skyblue')
-plt.bar(x + 0.2, v2_values, 0.4, label='Second Cosmic Velocity (v2)', color='salmon')
-plt.xticks(x, planets)
-plt.ylabel('Velocity (km/s)')
-plt.title('Comparison of First and Second Cosmic Velocities for Planets')
-plt.legend()
-plt.grid(axis='y')
+**Note:** This script calculates the first, second, and third cosmic velocities for Earth, Mars, and Jupiter.
+
+---
+
+## Graphical Representations
+
+### 1. Bar Chart of Cosmic Velocities
+
+```python
+labels = list(results.keys())
+v1_vals = [results[body]['v1'] for body in labels]
+v2_vals = [results[body]['v2'] for body in labels]
+v3_vals = [results[body]['v3'] for body in labels]
+
+x = np.arange(len(labels))
+width = 0.25
+
+fig, ax = plt.subplots(figsize=(10,6))
+ax.bar(x - width, v1_vals, width, label='First Cosmic Velocity')
+ax.bar(x, v2_vals, width, label='Second Cosmic Velocity')
+ax.bar(x + width, v3_vals, width, label='Third Cosmic Velocity')
+
+ax.set_xlabel('Celestial Body')
+ax.set_ylabel('Velocity (m/s)')
+ax.set_title('Comparison of Cosmic Velocities')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+ax.grid(True)
+plt.tight_layout()
 plt.show()
 ```
 
-![alt text](image-13.png)
+![alt text](image-15.png)
 
----
-
-## **5.2 Escape and Orbital Velocities**
+### 2. Line Plot of Cosmic Velocities
 
 ```python
-# Calculate v1 and v2
-v1 = {}
-v2 = {}
-
-for planet in masses:
-    r = radii[planet]
-    M = masses[planet]
-    v1[planet] = np.sqrt(G * M / r)
-    v2[planet] = np.sqrt(2 * G * M / r)
-
-# Print results
-for planet in v1:
-    print(f"{planet} -> v1 = {v1[planet]/1000:.2f} km/s, v2 = {v2[planet]/1000:.2f} km/s")
-```
-![alt text](image-12.png)
-
----
-
-## **5.3 Graph: v1 and v2 Comparison**
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-G = 6.67430e-11
-
-masses = {
-    "Earth": 5.972e24,
-    "Mars": 6.417e23,
-    "Jupiter": 1.898e27
-}
-
-radii = {
-    "Earth": 6.371e6,
-    "Mars": 3.3895e6,
-    "Jupiter": 6.9911e7
-}
-
-v1 = {}
-v2 = {}
-
-for planet in masses:
-    r = radii[planet]
-    M = masses[planet]
-    v1[planet] = np.sqrt(G * M / r)
-    v2[planet] = np.sqrt(2 * G * M / r)
-
-planets = list(masses.keys())
-
-v1_values = [v1[p]/1000 for p in planets]
-v2_values = [v2[p]/1000 for p in planets]
-
-x = np.arange(len(planets))
-
 plt.figure(figsize=(10,6))
-plt.bar(x - 0.2, v1_values, 0.4, label='First Cosmic Velocity (v1)', color='skyblue')
-plt.bar(x + 0.2, v2_values, 0.4, label='Second Cosmic Velocity (v2)', color='salmon')
-plt.xticks(x, planets)
-plt.ylabel('Velocity (km/s)')
-plt.title('Comparison of First and Second Cosmic Velocities for Planets')
+plt.plot(labels, v1_vals, 'o-', label='First Cosmic Velocity')
+plt.plot(labels, v2_vals, 's-', label='Second Cosmic Velocity')
+plt.plot(labels, v3_vals, 'd-', label='Third Cosmic Velocity')
+
+plt.xlabel('Celestial Body')
+plt.ylabel('Velocity (m/s)')
+plt.title('Trends of Cosmic Velocities')
 plt.legend()
-plt.grid(axis='y')
+plt.grid(True)
+plt.tight_layout()
 plt.show()
 ```
 
-![alt text](image-11.png)
+![alt text](image-16.png)
 
----
-
-## **Graph 1: Orbital vs Escape Velocities**
-
-- Earth: $v_1 \approx 7.9$ km/s, $v_2 \approx 11.2$ km/s.
-- Mars: Lower due to smaller mass.
-- Jupiter: Much higher due to massive gravity.
-
----
-
-# **6. Detailed Graphs and Simulations**
-
-## **6.1 Velocity vs Radius for Earth**
+### 3. Tabular Summary of Velocities
 
 ```python
-r_values = np.linspace(6.371e6, 10e6, 500)
-v1_earth = np.sqrt(G * masses["Earth"] / r_values)
-v2_earth = np.sqrt(2 * G * masses["Earth"] / r_values)
+df = pd.DataFrame(results).T[['v1', 'v2', 'v3']]
+print(df)
+```
 
-plt.figure(figsize=(10,6))
-plt.plot(r_values/1000, v1_earth/1000, label='v1 (Orbit Velocity)', color='blue')
-plt.plot(r_values/1000, v2_earth/1000, label='v2 (Escape Velocity)', color='red')
-plt.xlabel('Radius (km)')
-plt.ylabel('Velocity (km/s)')
-plt.title('Velocity vs Radius for Earth')
-plt.legend()
-plt.grid()
+![alt text](image-17.png)
+
+### 4. Log-Log Plot (Mass vs Escape Velocity)
+
+```python
+mass_vals = [results[body]['mass'] for body in labels]
+v2_vals = [results[body]['v2'] for body in labels]
+
+plt.figure(figsize=(8,6))
+plt.loglog(mass_vals, v2_vals, 'o-', markersize=8)
+plt.xlabel('Mass (kg)')
+plt.ylabel('Second Cosmic Velocity (m/s)')
+plt.title('Log-Log Plot: Mass vs Escape Velocity')
+plt.grid(True, which='both', ls='--')
+plt.tight_layout()
 plt.show()
 ```
 
-![alt text](image-10.png)
+![alt text](image-18.png)
 
----
-
-## **Graph 2: Velocity vs Radius (Earth)**
-
-- As radius increases, required velocity decreases.
-
----
-
-## **6.2 Velocity Comparison for Earth, Mars, Jupiter**
+### 5. Pie Chart (Relative Escape Velocities)
 
 ```python
-r = np.linspace(1e6, 1e8, 500)
-
-plt.figure(figsize=(10,6))
-for planet in masses:
-    v_escape = np.sqrt(2 * G * masses[planet] / r)
-    plt.plot(r/1000, v_escape/1000, label=f'{planet}')
-
-plt.xlabel('Radius (km)')
-plt.ylabel('Escape Velocity (km/s)')
-plt.title('Escape Velocity vs Radius for Different Planets')
-plt.legend()
-plt.grid()
+plt.figure(figsize=(8,8))
+plt.pie(v2_vals, labels=labels, autopct='%1.1f%%', startangle=140)
+plt.title('Relative Escape Velocities of Planets')
+plt.tight_layout()
 plt.show()
 ```
 
-![alt text](image-9.png)
+![alt text](image-19.png)
 
 ---
 
-## **Graph 3: Escape Velocities vs Radius**
+## Importance in Space Exploration
 
-- Jupiter dominates with much higher escape speeds.
+- **First Cosmic Velocity:** Required to place satellites into stable orbit.
+- **Second Cosmic Velocity:** Needed for missions leaving a planet, such as Moon and Mars exploration.
+- **Third Cosmic Velocity:** Necessary for deep-space missions and interstellar exploration planning.
 
----
-
-## **6.3 Energy vs Radius for Earth**
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-G = 6.67430e-11  # m^3 kg^-1 s^-2
-M_earth = 5.972e24  # kg
-
-radii = np.linspace(6.371e6, 10e7, 500)  # 6371 km (Earth surface) to 10000 km altitude
-
-U = -G * M_earth / radii   # Gravitational Potential Energy per unit mass (J/kg)
-K = G * M_earth / (2 * radii)  # Kinetic Energy per unit mass (J/kg)
-E_total = K + U  # Total Mechanical Energy
-
-plt.figure(figsize=(10,6))
-plt.plot(radii/1000, U/1e7, label='Potential Energy (x10⁷ J/kg)')
-plt.plot(radii/1000, K/1e7, label='Kinetic Energy (x10⁷ J/kg)')
-plt.plot(radii/1000, E_total/1e7, label='Total Energy (x10⁷ J/kg)')
-plt.xlabel('Radius (km)')
-plt.ylabel('Energy (J/kg)')
-plt.title('Energy vs Radius for Earth')
-plt.legend()
-plt.grid()
-plt.show()
-```
-
-![alt text](image-8.png)
+Understanding these velocities informs spacecraft design, mission trajectories, and fuel requirements.
 
 ---
 
-## **Graph 4: Energy Profiles**
+# Conclusion
 
-- At escape, total energy approaches zero.
-
----
-
-# **7. Space Exploration Applications**
-
-- Launch satellites into orbit (first cosmic velocity),
-- Send missions to Mars (second cosmic velocity),
-- Plan missions to outer planets and beyond (third cosmic velocity).
-
-Without sufficient velocity, rockets will fall back!
+Escape velocities and cosmic velocities set the fundamental energy thresholds that govern space exploration. Mastery of these concepts has enabled humanity to place satellites in orbit, reach other planets, and imagine future journeys beyond the Solar System.
 
 ---
 
-# **8. Frequently Asked Questions (FAQ)**
+# Frequently Asked Questions (FAQ)
 
-### **Q1: Why is escape velocity important?**
-It determines the minimum speed needed to leave a planet.
+### Q1: Why is the second cosmic velocity higher than the first?
+Because escaping a planet's gravity requires more energy than simply maintaining a stable orbit.
 
-### **Q2: Is escape velocity affected by mass of spacecraft?**
-No, escape velocity depends only on planet's mass and radius.
+### Q2: Why does Jupiter have a much higher escape velocity than Earth?
+Due to its significantly greater mass and size, creating a stronger gravitational field.
 
-### **Q3: How is third cosmic velocity calculated?**
-By considering both Earth's and Sun's gravitational wells.
+### Q3: What challenges exist in achieving the third cosmic velocity?
+The enormous amount of energy and precise navigation needed to escape a star's gravity well.
 
-### **Q4: Why is Jupiter’s escape velocity so high?**
-Jupiter's mass is over 300 times Earth's!
+### Q4: How are these velocities achieved in practice?
+Using multi-stage rockets, gravitational assists, and carefully planned launch trajectories.
 
-### **Q5: Does atmosphere affect escape?**
-Yes, atmospheric drag requires rockets to expend extra energy.
-
+### Q5: Are cosmic velocities affected by atmospheres?
+Yes, atmospheric drag must be overcome, requiring additional velocity beyond the theoretical minimums when launching from planets with atmospheres like Earth.
