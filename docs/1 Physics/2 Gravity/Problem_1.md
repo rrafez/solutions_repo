@@ -1,114 +1,78 @@
-# Gravity: Orbital Period and Orbital Radius
+# **Problem 1: Investigating the Relationship Between Orbital Period and Orbital Radius**
 
-## Motivation
-The relationship between the square of the orbital period and the cube of the orbital radius, known as **Kepler's Third Law**, is fundamental to celestial mechanics. It enables the calculation of planetary motions and satellite dynamics, providing essential insights into gravitational interactions in the universe.
+## **1. Theoretical Foundation**
 
-## Derivation of the Relationship
+Orbital mechanics describes how celestial bodies move under the influence of gravitational forces. A key concept is **Kepler's Third Law**, which states that the square of the orbital period ($T^2$) is proportional to the cube of the orbital radius ($r^3$).
 
-For a circular orbit:
+### **1.1 Equations of Motion**
 
-1. The gravitational force provides the necessary centripetal force:
+In circular orbits, the gravitational force provides the necessary centripetal force:
 
-   ```
-   F_gravity = F_centripetal
-   ```
+Gravitational Force:
+$$
+F_{\text{gravity}} = \frac{G M m}{r^2}
+$$
 
-2. Gravitational force:
+Centripetal Force:
+$$
+F_{\text{centripetal}} = \frac{m v^2}{r}
+$$
 
-   ```
-   F_gravity = (G * M * m) / r^2
-   ```
+Setting them equal:
+$$
+\frac{G M m}{r^2} = \frac{m v^2}{r}
+$$
 
-3. Centripetal force:
+Simplifying:
+$$
+v^2 = \frac{G M}{r}
+$$
 
-   ```
-   F_centripetal = (m * v^2) / r
-   ```
+The orbital period $T$ is the time taken to complete one orbit:
 
-4. Setting them equal:
+$$
+T = \frac{2\pi r}{v}
+$$
 
-   ```
-   (G * M * m) / r^2 = (m * v^2) / r
-   ```
+Substituting $v$:
+$$
+T = 2\pi r \sqrt{\frac{r}{G M}}
+$$
 
-   Simplify (mass m cancels out):
+Squaring both sides:
+$$
+T^2 = \frac{4\pi^2 r^3}{G M}
+$$
 
-   ```
-   (G * M) / r^2 = v^2 / r
-   ```
+Thus, the square of the orbital period is proportional to the cube of the orbital radius:
 
-   Thus:
-
-   ```
-   v^2 = (G * M) / r
-   ```
-
-5. Orbital period T is the time to complete one circle:
-
-   ```
-   T = (2 * π * r) / v
-   ```
-
-   Therefore:
-
-   ```
-   v = (2 * π * r) / T
-   ```
-
-6. Substitute for v in v²:
-
-   ```
-   ((2 * π * r) / T)^2 = (G * M) / r
-   ```
-
-7. Expanding:
-
-   ```
-   (4 * π^2 * r^2) / T^2 = (G * M) / r
-   ```
-
-8. Rearranging:
-
-   ```
-   T^2 = (4 * π^2 / G * M) * r^3
-   ```
-
-Thus, **T² is proportional to r³** for a given central mass M.
+$$
+T^2 \propto r^3
+$$
 
 ---
 
-## Implications for Astronomy
+## **2. Analysis of the Relationship**
 
-- **Planetary Mass Estimation**: By knowing the period and radius, the mass of planets and stars can be determined.
-- **Satellite Engineering**: Used for designing satellite orbits like GPS systems.
-- **Exoplanet Detection**: Helps detect exoplanets based on star wobbling.
-
----
-
-## Real-World Examples
-
-### 1. The Moon's orbit around Earth
-- Orbital radius ≈ 384,400 km
-- Orbital period ≈ 27.3 days
-
-Verifying \(T^2 \propto r^3\) gives a very close match.
-
-### 2. Planets in the Solar System
-- Jupiter's moons
-- Saturn's rings
-- Distant exoplanets
-
-All obey Kepler's Third Law.
+- The larger the orbital radius, the longer the period of revolution.
+- A more massive central body (larger $M$) results in shorter orbital periods for a given radius.
+- This relationship is foundational for determining distances and masses in astronomy.
 
 ---
 
-## Computational Model
+## **3. Practical Applications**
 
-### Python Code
+- **Satellite Deployment:** Designing satellite orbits around Earth or other planets.
+- **Planetary Mass Calculation:** Determining the mass of celestial bodies by observing their moons.
+- **Exoplanet Studies:** Finding exoplanets and their orbital characteristics around distant stars.
+
+---
+
+## **4. Implementation: Python Simulation**
+
+The following Python script simulates circular orbits and verifies the relationship between $T^2$ and $r^3$.
 
 ```python
-# orbital_simulation.py
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -120,69 +84,74 @@ M = 5.972e24     # mass of Earth (kg)
 def orbital_period(r):
     return 2 * np.pi * np.sqrt(r**3 / (G * M))
 
-# Generate a range of orbital radii (from 7000 km to 50000 km)
-radii = np.linspace(7e6, 5e7, 100)  # meters
-periods = orbital_period(radii)     # seconds
+# Range of orbital radii
+radii = np.linspace(7e6, 5e7, 100)  # from 7000 km to 50000 km (converted to meters)
+periods = orbital_period(radii)
 
 # Plotting T^2 vs r^3
-plt.figure(figsize=(10,6))
-plt.plot(radii**3, periods**2, marker='o', linestyle='-')
-plt.xlabel('Orbital Radius Cubed ($r^3$) [m³]')
-plt.ylabel('Orbital Period Squared ($T^2$) [s²]')
-plt.title('Kepler\'s Third Law Verification')
-plt.grid(True)
+plt.figure(figsize=(8, 5))
+plt.plot(radii**3, periods**2, label='T² vs r³')
+plt.xlabel("Orbital Radius Cubed ($r^3$) [m³]")
+plt.ylabel("Orbital Period Squared ($T^2$) [s²]")
+plt.title("Verification of Kepler's Third Law")
+plt.legend()
+plt.grid()
 plt.show()
 
-# Plotting actual orbits (for visualization)
+# Plotting Orbits
 theta = np.linspace(0, 2*np.pi, 100)
 
 plt.figure(figsize=(8,8))
 for r in np.linspace(7e6, 4e7, 5):
     x = r * np.cos(theta)
     y = r * np.sin(theta)
-    plt.plot(x, y, label=f'r = {r/1000:.0f} km')
+    plt.plot(x, y, label=f'Radius = {r/1000:.0f} km')
 
-plt.scatter(0, 0, color='yellow', label='Earth')  # Earth at the center
-plt.xlabel('x [m]')
-plt.ylabel('y [m]')
+plt.scatter(0, 0, color='yellow', label='Earth')  # Earth at center
+plt.xlabel("x position (m)")
+plt.ylabel("y position (m)")
+plt.title("Circular Orbits around Earth")
 plt.legend()
-plt.title('Visualization of Circular Orbits')
-plt.grid(True)
+plt.grid()
 plt.axis('equal')
 plt.show()
 ```
 
 ---
 
-## Graphical Results
+## **5. Explanation of the Graphs**
 
-### 1. \(T^2\) vs \(r^3\) Plot
+### **Graph 1: T² vs r³**
 
-- Demonstrates a linear relationship between \(T^2\) and \(r^3\), verifying Kepler’s Third Law.
+This graph demonstrates the linear relationship between the square of the orbital period ($T^2$) and the cube of the orbital radius ($r^3$).
 
-### 2. Circular Orbits Visualization
+- As $r^3$ increases, $T^2$ also increases linearly.
+- This verifies **Kepler's Third Law** for circular orbits.
 
-- Shows different satellite orbits around Earth.
+### **Graph 2: Visualization of Orbits**
 
----
+- Shows circular orbits for satellites at different radii.
+- Earth is placed at the center.
+- Larger orbital radius corresponds to a larger orbit and a longer period.
 
-## Extension to Elliptical Orbits
-
-Kepler’s Third Law extends to elliptical orbits if we replace \(r\) with the semi-major axis \(a\):
-
-```
-T^2 ∝ a^3
-```
-
-In elliptical orbits:
-- Speed varies (faster at periapsis, slower at apoapsis).
-- Gravitational potential energy and kinetic energy exchange, but total energy remains constant.
+These visualizations help understand how satellites and moons move around their parent bodies.
 
 ---
 
-## Conclusion
+## **6. Frequently Asked Questions (FAQ)**
 
-We have derived, simulated, and verified Kepler's Third Law for circular orbits through analytical derivation, real-world examples, and computational simulation. This foundational principle remains vital in modern astronomy and space exploration.
+### **1. What does Kepler's Third Law state for circular orbits?**
+- It states that the square of the orbital period ($T^2$) is directly proportional to the cube of the orbital radius ($r^3$).
 
----
+### **2. Does the mass of the satellite affect the orbital period?**
+- No, the satellite's mass cancels out in the equations; only the central mass ($M$) and the orbital radius ($r$) matter.
+
+### **3. How is this law useful in real-world applications?**
+- It is used in calculating satellite orbits, determining planetary masses, and studying exoplanets.
+
+### **4. What happens if the central body's mass increases?**
+- If $M$ increases, the orbital period for a given radius decreases (i.e., objects orbit faster).
+
+### **5. Does this relationship apply to elliptical orbits?**
+- Yes, but $r$ is replaced with the semi-major axis ($a$) of the ellipse in the general form of Kepler's Third Law.
 
