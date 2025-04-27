@@ -1,141 +1,226 @@
 # Gravity: Orbital Period and Orbital Radius
 
 ## Motivation
-
-The relationship between the square of the orbital period (T) and the cube of the orbital radius (r), known as **Kepler's Third Law**, is a fundamental principle in celestial mechanics. Understanding this connection allows us to analyze satellite motions, planetary systems, and broader gravitational phenomena.
-
----
+The relationship between the square of the orbital period and the cube of the orbital radius, known as **Kepler's Third Law**, is fundamental to celestial mechanics. It enables the calculation of planetary motions and satellite dynamics, providing essential insights into gravitational interactions in the universe.
 
 ## Derivation of the Relationship
 
-**Newton's Law of Gravitation:**
-\[ F = \frac{G M m}{r^2} \]
+For a circular orbit:
 
-**Centripetal Force for Circular Motion:**
-\[ F = m \frac{v^2}{r} \]
+1. The gravitational force provides the necessary centripetal force:
 
-Equating gravitational force to centripetal force:
-\[ \frac{G M m}{r^2} = m \frac{v^2}{r} \]
+   ```
+   F_gravity = F_centripetal
+   ```
 
-Simplifying:
-\[ v^2 = \frac{G M}{r} \]
+2. Gravitational force:
 
-Orbital period \(T\) is the time to complete one full circle:
-\[ T = \frac{2 \pi r}{v} \quad \Rightarrow \quad v = \frac{2 \pi r}{T} \]
+   ```
+   F_gravity = (G * M * m) / r^2
+   ```
 
-Substitute into the velocity equation:
-\[ \left(\frac{2 \pi r}{T}\right)^2 = \frac{G M}{r} \]
+3. Centripetal force:
 
-Expand:
-\[ \frac{4 \pi^2 r^2}{T^2} = \frac{G M}{r} \]
+   ```
+   F_centripetal = (m * v^2) / r
+   ```
 
-Rearrange:
-\[ T^2 = \frac{4 \pi^2}{G M} r^3 \]
+4. Setting them equal:
 
-**Thus, we derive:**
-\[ T^2 \propto r^3 \]
+   ```
+   (G * M * m) / r^2 = (m * v^2) / r
+   ```
 
-This is **Kepler's Third Law** for circular orbits.
+   Simplify (mass m cancels out):
+
+   ```
+   (G * M) / r^2 = v^2 / r
+   ```
+
+   Thus:
+
+   ```
+   v^2 = (G * M) / r
+   ```
+
+5. Orbital period T is the time to complete one circle:
+
+   ```
+   T = (2 * π * r) / v
+   ```
+
+   Therefore:
+
+   ```
+   v = (2 * π * r) / T
+   ```
+
+6. Substitute for v in v²:
+
+   ```
+   ((2 * π * r) / T)^2 = (G * M) / r
+   ```
+
+7. Expanding:
+
+   ```
+   (4 * π^2 * r^2) / T^2 = (G * M) / r
+   ```
+
+8. Rearranging:
+
+   ```
+   T^2 = (4 * π^2 / G * M) * r^3
+   ```
+
+Thus, **T² is proportional to r³** for a given central mass M.
 
 ---
 
 ## Implications for Astronomy
 
-- **Calculating Masses:** Knowing a satellite's orbital radius and period allows astronomers to calculate the mass of the central body (e.g., Earth, Sun).
-- **Determining Distances:** For distant planets and moons, measuring the period gives an estimate of their distance from the central mass.
-- **Comparative Analysis:** Planets farther from the Sun have much longer periods, as seen in our Solar System.
+- **Planetary Mass Estimation**: By knowing the period and radius, the mass of planets and stars can be determined.
+- **Satellite Engineering**: Used for designing satellite orbits like GPS systems.
+- **Exoplanet Detection**: Helps detect exoplanets based on star wobbling.
 
 ---
 
 ## Real-World Examples
 
-**The Moon's orbit around Earth:**
-- Radius \( r \approx 3.84 \times 10^8 \) m
-- Period \( T \approx 27.3 \) days
+### 1. The Moon's orbit around Earth
+- Orbital radius ≈ 384,400 km
+- Orbital period ≈ 27.3 days
 
-**Earth's orbit around the Sun:**
-- Radius \( r \approx 1.496 \times 10^{11} \) m
-- Period \( T \approx 365.25 \) days
+Verifying \(T^2 \propto r^3\) gives a very close match.
 
-They both obey the \( T^2 \propto r^3 \) relation.
+### 2. Planets in the Solar System
+- Jupiter's moons
+- Saturn's rings
+- Distant exoplanets
+
+All obey Kepler's Third Law.
 
 ---
 
-# Computational Model: Circular Orbit Simulation
+## Computational Model
+
+### Python Code
 
 ```python
+# orbital_simulation.py
+
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Constants
-G = 6.67430e-11  # Gravitational constant (m^3 kg^-1 s^-2)
-M_earth = 5.972e24  # Mass of the Earth (kg)
+G = 6.67430e-11  # gravitational constant (m^3 kg^-1 s^-2)
+M = 5.972e24     # mass of Earth (kg)
 
-# Orbital radii (in meters)
-radii = np.linspace(7e6, 4e8, 100)  # from 7000 km to 400,000 km
+# Function to compute orbital period
+def orbital_period(r):
+    return 2 * np.pi * np.sqrt(r**3 / (G * M))
 
-# Calculate periods using Kepler's Third Law
-periods = 2 * np.pi * np.sqrt(radii**3 / (G * M_earth))
+# Generate a range of orbital radii (from 7000 km to 50000 km)
+radii = np.linspace(7e6, 5e7, 100)  # meters
+periods = orbital_period(radii)     # seconds
 
-# Plot Period^2 vs Radius^3
-plt.figure()
-plt.plot(radii**3, periods**2, 'o')
-plt.xlabel("Radius^3 (m^3)")
-plt.ylabel("Period^2 (s^2)")
-plt.title("Kepler's Third Law Verification")
+# Plotting T^2 vs r^3
+plt.figure(figsize=(10,6))
+plt.plot(radii**3, periods**2, marker='o', linestyle='-')
+plt.xlabel('Orbital Radius Cubed ($r^3$) [m³]')
+plt.ylabel('Orbital Period Squared ($T^2$) [s²]')
+plt.title('Kepler\'s Third Law Verification')
 plt.grid(True)
 plt.show()
 
-# Plot Orbit Trajectories
-fig, ax = plt.subplots()
-for r in np.linspace(7e6, 4e8, 5):
-    theta = np.linspace(0, 2*np.pi, 100)
+# Plotting actual orbits (for visualization)
+theta = np.linspace(0, 2*np.pi, 100)
+
+plt.figure(figsize=(8,8))
+for r in np.linspace(7e6, 4e7, 5):
     x = r * np.cos(theta)
     y = r * np.sin(theta)
-    ax.plot(x, y, label=f"r = {r/1e3:.0f} km")
+    plt.plot(x, y, label=f'r = {r/1000:.0f} km')
 
-ax.set_xlabel("x (m)")
-ax.set_ylabel("y (m)")
-ax.set_aspect('equal')
-ax.set_title("Circular Orbits Around Earth")
-ax.legend()
+plt.scatter(0, 0, color='yellow', label='Earth')  # Earth at the center
+plt.xlabel('x [m]')
+plt.ylabel('y [m]')
+plt.legend()
+plt.title('Visualization of Circular Orbits')
 plt.grid(True)
+plt.axis('equal')
 plt.show()
 ```
 
 ---
 
-# Graphical Representations
+## Graphical Results
 
-- **First Graph:** Linear relation between \( T^2 \) and \( r^3 \), confirming Kepler's Law.
-- **Second Graph:** Multiple circular orbits of different radii around the Earth.
+### 1. \(T^2\) vs \(r^3\) Plot
 
----
+- Demonstrates a linear relationship between \(T^2\) and \(r^3\), verifying Kepler’s Third Law.
 
-# Extension to Elliptical Orbits
+### 2. Circular Orbits Visualization
 
-Kepler's Third Law extends to elliptical orbits by replacing the radius with the semi-major axis \( a \):
-
-\[ T^2 \propto a^3 \]
-
-Where \( a \) is the average distance from the focus (not the exact radius).
-
-- Elliptical orbits are common for most celestial bodies.
-- Planets sweep out equal areas in equal times (Kepler's Second Law).
-
-Thus, while circular orbits are a special case, the general law remains valid for all orbital shapes.
+- Shows different satellite orbits around Earth.
 
 ---
 
-# Conclusion
+## Extension to Elliptical Orbits
 
-Through derivation, simulation, and real-world examples, we've shown that the square of the orbital period is proportional to the cube of the orbital radius. This fundamental relationship continues to guide our understanding of gravitational systems across the universe.
+Kepler’s Third Law extends to elliptical orbits if we replace \(r\) with the semi-major axis \(a\):
+
+```
+T^2 ∝ a^3
+```
+
+In elliptical orbits:
+- Speed varies (faster at periapsis, slower at apoapsis).
+- Gravitational potential energy and kinetic energy exchange, but total energy remains constant.
 
 ---
 
-# References
+## Conclusion
 
-- Isaac Newton, *Principia Mathematica*, 1687
-- Johannes Kepler, *Astronomia Nova*, 1609
-- NASA Planetary Fact Sheets
-# Problem 1
+We have derived, simulated, and verified Kepler's Third Law for circular orbits through analytical derivation, real-world examples, and computational simulation. This foundational principle remains vital in modern astronomy and space exploration.
+
+---
+
+## 📂 Project Structure Recommendation
+
+```
+Gravity-Project/
+│
+├── README.md          # (this markdown file)
+├── orbital_simulation.py
+├── requirements.txt   # (optional, for numpy and matplotlib)
+└── images/            # (if you want to save plots)
+```
+
+---
+
+## Requirements
+
+Create a `requirements.txt` file with:
+
+```
+numpy
+matplotlib
+```
+
+---
+
+## GitHub Integration Steps
+
+Follow these commands in your terminal:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit: Kepler's Third Law project"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git push -u origin main
+```
+
+---
