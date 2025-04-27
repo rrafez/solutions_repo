@@ -172,6 +172,210 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-3">Problem 3</h1>
+<h1 id="trajectories-of-a-freely-released-payload-near-earth">Trajectories of a Freely Released Payload Near Earth</h1>
+<h2 id="motivation">Motivation</h2>
+<p>When an object is released from a moving rocket near Earth, its trajectory depends on initial conditions such as velocity, angle, and altitude. This problem blends principles of orbital mechanics, energy conservation, and numerical simulation. Understanding these trajectories is critical for missions like satellite deployment, reentry modules, or escaping Earth's gravity.</p>
+<hr/>
+<h2 id="types-of-possible-trajectories">Types of Possible Trajectories</h2>
+<p>Depending on the initial velocity (<span class="arithmatex">\(v_0\)</span>) and altitude (<span class="arithmatex">\(h\)</span>), a payload can follow different paths:</p>
+<ul>
+<li><strong>Elliptical Orbit</strong>: <span class="arithmatex">\(v_0\)</span> &lt; escape velocity; payload remains bound to Earth.</li>
+<li><strong>Parabolic Trajectory</strong>: <span class="arithmatex">\(v_0\)</span> ≈ escape velocity; payload barely escapes Earth's gravity.</li>
+<li><strong>Hyperbolic Trajectory</strong>: <span class="arithmatex">\(v_0\)</span> &gt; escape velocity; payload escapes with excess kinetic energy.</li>
+<li><strong>Suborbital Trajectory</strong>: <span class="arithmatex">\(v_0\)</span> too low for orbit; payload falls back to Earth.</li>
+</ul>
+<hr/>
+<h2 id="fundamental-equations">Fundamental Equations</h2>
+<ul>
+<li>
+<p>Gravitational Force:
+  <span class="arithmatex">\(F = \frac{GMm}{r^2}\)</span></p>
+</li>
+<li>
+<p>Gravitational Potential Energy:
+  <span class="arithmatex">\(U = -\frac{GMm}{r}\)</span></p>
+</li>
+<li>
+<p>Kinetic Energy:
+  <span class="arithmatex">\(K = \frac{1}{2}mv^2\)</span></p>
+</li>
+<li>
+<p>Total Energy (E):
+  <span class="arithmatex">\(E = K + U\)</span></p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(E &lt; 0\)</span>: Elliptical orbit</p>
+</li>
+<li>If <span class="arithmatex">\(E = 0\)</span>: Parabolic trajectory</li>
+<li>If <span class="arithmatex">\(E &gt; 0\)</span>: Hyperbolic escape</li>
+</ul>
+<hr/>
+<h1 id="constants-and-initial-setup">Constants and Initial Setup</h1>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+G = 6.67430e-11  # Gravitational constant (m^3 kg^-1 s^-2)
+M_earth = 5.972e24  # Mass of Earth (kg)
+R_earth = 6371e3  # Radius of Earth (m)
+altitude = 300e3  # Payload release altitude (m)
+r0 = R_earth + altitude
+v_escape = np.sqrt(2 * G * M_earth / r0)
+
+print(f"Escape velocity at {altitude/1000:.0f} km altitude: {v_escape/1000:.2f} km/s")
+</code></pre>
+<blockquote>
+<blockquote>
+<p>Escape velocity at 300 km altitude: 10.93 km/s</p>
+</blockquote>
+</blockquote>
+<p><strong>Note:</strong> The escape velocity at the release altitude is printed for reference.</p>
+<hr/>
+<h1 id="trajectories-of-payloads">Trajectories of Payloads</h1>
+<pre><code class="language-python">initial_velocities = [0.7 * v_escape, v_escape, 1.2 * v_escape]
+labels = ['Elliptical Orbit', 'Parabolic Escape', 'Hyperbolic Escape']
+dt = 1  # Time step (s)
+steps = 15000
+
+fig, ax_traj = plt.subplots(figsize=(8,8))
+
+for v0, label in zip(initial_velocities, labels):
+    pos = np.array([r0, 0])
+    vel = np.array([0, v0])
+    x_vals, y_vals = [], []
+
+    for _ in range(steps):
+        r = np.linalg.norm(pos)
+        acc = -G * M_earth * pos / r**3
+        vel += acc * dt
+        pos += vel * dt
+        x_vals.append(pos[0])
+        y_vals.append(pos[1])
+        if r &lt; R_earth:
+            break
+
+    ax_traj.plot(x_vals, y_vals, label=label)
+
+# Draw Earth
+theta = np.linspace(0, 2*np.pi, 100)
+ax_traj.plot(R_earth*np.cos(theta), R_earth*np.sin(theta), 'k')
+ax_traj.set_aspect('equal')
+ax_traj.set_xlim(-2e7, 2e7)
+ax_traj.set_ylim(-2e7, 2e7)
+ax_traj.set_xlabel('x (m)')
+ax_traj.set_ylabel('y (m)')
+ax_traj.set_title('Payload Trajectories')
+ax_traj.legend()
+ax_traj.grid()
+plt.show()
+</code></pre>
+<p><img alt="alt text" src="../image-20.png"/></p>
+<p><strong>Note:</strong> This plot shows how different initial speeds result in different types of trajectories.</p>
+<hr/>
+<h1 id="energy-vs-time">Energy vs Time</h1>
+<pre><code class="language-python">fig, ax_energy = plt.subplots(figsize=(8,6))
+
+for v0, label in zip(initial_velocities, labels):
+    pos = np.array([r0, 0])
+    vel = np.array([0, v0])
+    E_vals, t_vals = [], []
+
+    for t in range(steps):
+        r = np.linalg.norm(pos)
+        acc = -G * M_earth * pos / r**3
+        vel += acc * dt
+        pos += vel * dt
+        energy = 0.5 * np.linalg.norm(vel)**2 - G * M_earth / r
+        E_vals.append(energy)
+        t_vals.append(t * dt)
+        if r &lt; R_earth:
+            break
+
+    ax_energy.plot(t_vals, E_vals, label=label)
+
+ax_energy.set_xlabel('Time (s)')
+ax_energy.set_ylabel('Specific Energy (J/kg)')
+ax_energy.set_title('Energy vs Time')
+ax_energy.legend()
+ax_energy.grid()
+plt.show()
+</code></pre>
+<p><img alt="alt text" src="../image-21.png"/></p>
+<p><strong>Note:</strong> This plot shows how the total specific energy evolves over time for different cases.</p>
+<hr/>
+<h1 id="velocity-vs-time">Velocity vs Time</h1>
+<pre><code class="language-python">fig, ax_velocity = plt.subplots(figsize=(8,6))
+
+for v0, label in zip(initial_velocities, labels):
+    pos = np.array([r0, 0])
+    vel = np.array([0, v0])
+    v_vals, t_vals = [], []
+
+    for t in range(steps):
+        r = np.linalg.norm(pos)
+        acc = -G * M_earth * pos / r**3
+        vel += acc * dt
+        pos += vel * dt
+        v_vals.append(np.linalg.norm(vel))
+        t_vals.append(t * dt)
+        if r &lt; R_earth:
+            break
+
+    ax_velocity.plot(t_vals, v_vals, label=label)
+
+ax_velocity.set_xlabel('Time (s)')
+ax_velocity.set_ylabel('Velocity (m/s)')
+ax_velocity.set_title('Velocity vs Time')
+ax_velocity.legend()
+ax_velocity.grid()
+plt.show()
+</code></pre>
+<p><img alt="alt text" src="../image-22.png"/></p>
+<p><strong>Note:</strong> This plot shows how the payload speed changes with time depending on initial conditions.</p>
+<hr/>
+<h1 id="distance-from-earth-vs-time">Distance from Earth vs Time</h1>
+<pre><code class="language-python">fig, ax_distance = plt.subplots(figsize=(8,6))
+
+for v0, label in zip(initial_velocities, labels):
+    pos = np.array([r0, 0])
+    vel = np.array([0, v0])
+    r_vals, t_vals = [], []
+
+    for t in range(steps):
+        r = np.linalg.norm(pos)
+        acc = -G * M_earth * pos / r**3
+        vel += acc * dt
+        pos += vel * dt
+        r_vals.append(r)
+        t_vals.append(t * dt)
+        if r &lt; R_earth:
+            break
+
+    ax_distance.plot(t_vals, r_vals, label=label)
+
+ax_distance.set_xlabel('Time (s)')
+ax_distance.set_ylabel('Distance from Earth Center (m)')
+ax_distance.set_title('Distance vs Time')
+ax_distance.legend()
+ax_distance.grid()
+plt.show()
+</code></pre>
+<p><img alt="alt text" src="../image-23.png"/></p>
+<p><strong>Note:</strong> This plot shows the distance of the payload from the Earth's center as a function of time.</p>
+<hr/>
+<h1 id="conclusion">Conclusion</h1>
+<p>Simulating and understanding trajectories for varying initial speeds and angles is essential for modern space missions. From orbital insertions to deep-space escapes, mastering these mechanics is a fundamental part of aerospace engineering.</p>
+<hr/>
+<h1 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h1>
+<h3 id="q1-why-simulate-different-angles">Q1: Why simulate different angles?</h3>
+<p>Different angles allow payloads to achieve stable orbit, escape, or crash depending on mission needs.</p>
+<h3 id="q2-how-does-energy-help-classify-trajectory-type">Q2: How does energy help classify trajectory type?</h3>
+<p>Total energy being negative, zero, or positive immediately tells whether the motion is elliptical, parabolic, or hyperbolic.</p>
+<h3 id="q3-can-air-resistance-be-included">Q3: Can air resistance be included?</h3>
+<p>Yes, adding atmospheric drag would make the simulation more realistic but more complex.</p>
+<h3 id="q4-why-does-velocity-decrease-after-release">Q4: Why does velocity decrease after release?</h3>
+<p>Gravitational pull reduces upward velocity; depending on initial speed, the payload may orbit, escape, or fall.</p>
+<h3 id="q5-how-accurate-is-eulers-method-here">Q5: How accurate is Euler's method here?</h3>
+<p>For small enough time steps (<span class="arithmatex">\(\Delta t\)</span>), it gives reasonably accurate approximations, but better methods exist (e.g., Runge-Kutta 4th order).</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
