@@ -153,6 +153,8 @@ plt.legend()
 plt.show()
 ```
 
+![alt text](image.png)
+
 ---
 
 ### **5.2 Python Code: Visualizing Circular Orbits**
@@ -176,6 +178,9 @@ plt.grid(True)
 plt.axis('equal')
 plt.show()
 ```
+
+![alt text](image-1.png)
+
 
 ---
 
@@ -239,6 +244,9 @@ plt.legend()
 plt.grid(True)
 plt.show()
 ```
+
+![alt text](image-2.png)
+
 
 ---
 
