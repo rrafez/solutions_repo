@@ -186,11 +186,11 @@ def plot_pattern(N):
 for N in [3, 4, 5]:
     plot_pattern(N)
 ```
-![alt text](image-1.png)
+![alt text](image-7.png)
 
-![alt text](image-2.png)
+![alt text](image-8.png)
 
-![alt text](image-3.png)
+![alt text](image-9.png)
 
 ```python
 from mpl_toolkits.mplot3d import Axes3D
