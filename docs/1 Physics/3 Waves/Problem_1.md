@@ -3,6 +3,31 @@
 ## Motivation
 Interference on a water surface provides a beautiful, tangible example of how waves interact. By studying these patterns from coherent point sources arranged in a regular polygon, we can observe and analyze wave superposition, constructive interference (bright spots), and destructive interference (dark spots).
 
+---
+
+## Assumptions and Parameters
+- All sources emit circular waves.
+- Same amplitude 
+
+$$
+ A 
+ $$
+ 
+ , wavelength 
+ 
+ $$
+  \lambda 
+  $$
+  
+  , and frequency 
+  
+  $$
+   f 
+   $$
+   .
+- The phase is constant across all sources.
+
+
 ## Physical Background
 
 When multiple point sources emit circular waves in phase, the overlapping of these waves leads to **constructive** and **destructive** interference. The wave pattern on the water surface can be predicted by summing the displacements from each source using the **principle of superposition**.
