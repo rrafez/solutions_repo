@@ -64,7 +64,6 @@ We consider:
 
 ---
 
-<<<<<<< HEAD
 ## Imports and Configuration
 ```python
 import numpy as np
@@ -142,7 +141,8 @@ for N in [1, 2]:
     plot_pattern(N)
 ```
 
-![alt text](image.png)
+![alt text](image-5.png)
+![alt text](image-6.png)
 
 ```python
 import numpy as np
