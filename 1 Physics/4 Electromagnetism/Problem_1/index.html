@@ -72,6 +72,24 @@
 <ul class="current">
 <li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#simulating-the-effects-of-the-lorentz-force">Simulating the Effects of the Lorentz Force</a>
+<ul>
+<li class="toctree-l4"><a class="reference internal" href="#motivation">Motivation</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#key-equations">Key Equations</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#exploration-of-applications">Exploration of Applications</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#simulating-particle-motion">Simulating Particle Motion</a>
+<ul>
+<li class="toctree-l4"><a class="reference internal" href="#simulation-requirements">Simulation Requirements</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parameter-exploration">Parameter Exploration</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -172,6 +190,50 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h2 id="simulating-the-effects-of-the-lorentz-force">Simulating the Effects of the Lorentz Force</h2>
+<h3 id="motivation">Motivation</h3>
+<p>The Lorentz force plays a fundamental role in electromagnetism, governing the motion of charged particles in electric and magnetic fields. Understanding this force is crucial in applications like particle accelerators, mass spectrometers, and plasma confinement systems.</p>
+<hr/>
+<h2 id="key-equations">Key Equations</h2>
+<p>The Lorentz force equation is:</p>
+<div class="arithmatex">\[
+\vec{F} = q(\vec{E} + \vec{v} \times \vec{B})
+\]</div>
+<p>Where:</p>
+<ul>
+<li><span class="arithmatex">\( q \)</span> = charge of the particle</li>
+<li><span class="arithmatex">\( \vec{E} \)</span> = electric field</li>
+<li><span class="arithmatex">\( \vec{B} \)</span> = magnetic field</li>
+<li><span class="arithmatex">\( \vec{v} \)</span> = velocity of the particle</li>
+</ul>
+<hr/>
+<h2 id="exploration-of-applications">Exploration of Applications</h2>
+<p>Identify systems where the Lorentz force plays a key role. Some examples include:</p>
+<ul>
+<li>Particle accelerators</li>
+<li>Mass spectrometers</li>
+<li>Plasma confinement systems</li>
+</ul>
+<p>Discuss the relevance of electric <span class="arithmatex">\( \vec{E} \)</span> and magnetic <span class="arithmatex">\( \vec{B} \)</span> fields in controlling the motion of charged particles.</p>
+<hr/>
+<h2 id="simulating-particle-motion">Simulating Particle Motion</h2>
+<h3 id="simulation-requirements">Simulation Requirements</h3>
+<p>Implement a simulation to compute and visualize the trajectory of a charged particle under various field conditions:</p>
+<ol>
+<li>A uniform magnetic field.</li>
+<li>Combined uniform electric and magnetic fields.</li>
+<li>Crossed electric and magnetic fields.</li>
+</ol>
+<p>Simulate the particle’s motion, which could be circular, helical, or drift, based on initial conditions and field configurations.</p>
+<hr/>
+<h2 id="parameter-exploration">Parameter Exploration</h2>
+<p>Allow variations in the following parameters:</p>
+<ul>
+<li>Field strengths <span class="arithmatex">\( E \)</span>, <span class="arithmatex">\( B \)</span></li>
+<li>Initial particle velocity <span class="arithmatex">\( \vec{v} \)</span></li>
+<li>Charge and mass of the particle <span class="arithmatex">\( q \)</span>, <span class="arithmatex">\( m \)</span></li>
+</ul>
+<p>Observe how these parameters influence the particle's trajectory.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
