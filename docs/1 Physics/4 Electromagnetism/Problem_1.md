@@ -23,37 +23,57 @@ Where:
 
 ---
 
-## Exploration of Applications
+## Simulation Parameters
 
-Identify systems where the Lorentz force plays a key role. Some examples include:
+```python
+import numpy as np
+import matplotlib.pyplot as plt
 
-- Particle accelerators
-- Mass spectrometers
-- Plasma confinement systems
+# === Particle and Field Parameters ===
+q = 1.0                        # Charge (C)
+m = 1.0                        # Mass (kg)
+E = np.array([0.0, 0.0, 0.0])  # Electric field (V/m)
+B = np.array([0.0, 0.0, 1.0])  # Magnetic field (T)
 
-Discuss the relevance of electric \( \vec{E} \) and magnetic \( \vec{B} \) fields in controlling the motion of charged particles.
+# === Initial Conditions ===
+r = np.array([0.0, 0.0, 0.0])  # Position (m)
+v = np.array([1.0, 0.0, 0.0])  # Velocity (m/s)
+
+# === Time Setup ===
+dt = 0.01     # Time step (s)
+T = 20        # Total time (s)
+N = int(T / dt)
+
+# === Data Storage for Trajectory ===
+trajectory = np.zeros((N, 3))
+time = np.linspace(0, T, N)
+
+# === Simulation Loop ===
+for i in range(N):
+    # Save current position
+    trajectory[i] = r
+
+    # Lorentz force: F = q(E + v × B)
+    force = q * (E + np.cross(v, B))
+    
+    # Acceleration
+    a = force / m
+
+    # Euler integration (can upgrade to Runge-Kutta for higher accuracy)
+    v += a * dt
+    r += v * dt
+
+# === Plotting the Trajectory in XY Plane ===
+plt.figure(figsize=(6, 6))
+plt.plot(trajectory[:, 0], trajectory[:, 1], label='Trajectory')
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.title('Charged Particle in Magnetic Field (Circular Motion)')
+plt.grid(True)
+plt.axis('equal')
+plt.legend()
+plt.show()
+```
+![alt text](image.png)
 
 ---
-
-## Simulating Particle Motion
-
-### Simulation Requirements
-Implement a simulation to compute and visualize the trajectory of a charged particle under various field conditions:
-
-1. A uniform magnetic field.
-2. Combined uniform electric and magnetic fields.
-3. Crossed electric and magnetic fields.
-
-Simulate the particle’s motion, which could be circular, helical, or drift, based on initial conditions and field configurations.
-
----
-
-## Parameter Exploration
-
-Allow variations in the following parameters:
-
-- Field strengths \( E \), \( B \)
-- Initial particle velocity \( \vec{v} \)
-- Charge and mass of the particle \( q \), \( m \)
-
-Observe how these parameters influence the particle's trajectory.
