@@ -80,15 +80,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#key-equations">Key Equations</a>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#exploration-of-applications">Exploration of Applications</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#simulating-particle-motion">Simulating Particle Motion</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#simulation-requirements">Simulation Requirements</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#parameter-exploration">Parameter Exploration</a>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-parameters">Simulation Parameters</a>
 </li>
 </ul>
 </li>
@@ -207,33 +199,57 @@
 <li><span class="arithmatex">\( \vec{v} \)</span> = velocity of the particle</li>
 </ul>
 <hr/>
-<h2 id="exploration-of-applications">Exploration of Applications</h2>
-<p>Identify systems where the Lorentz force plays a key role. Some examples include:</p>
-<ul>
-<li>Particle accelerators</li>
-<li>Mass spectrometers</li>
-<li>Plasma confinement systems</li>
-</ul>
-<p>Discuss the relevance of electric <span class="arithmatex">\( \vec{E} \)</span> and magnetic <span class="arithmatex">\( \vec{B} \)</span> fields in controlling the motion of charged particles.</p>
+<h2 id="simulation-parameters">Simulation Parameters</h2>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# === Particle and Field Parameters ===
+q = 1.0                        # Charge (C)
+m = 1.0                        # Mass (kg)
+E = np.array([0.0, 0.0, 0.0])  # Electric field (V/m)
+B = np.array([0.0, 0.0, 1.0])  # Magnetic field (T)
+
+# === Initial Conditions ===
+r = np.array([0.0, 0.0, 0.0])  # Position (m)
+v = np.array([1.0, 0.0, 0.0])  # Velocity (m/s)
+
+# === Time Setup ===
+dt = 0.01     # Time step (s)
+T = 20        # Total time (s)
+N = int(T / dt)
+
+# === Data Storage for Trajectory ===
+trajectory = np.zeros((N, 3))
+time = np.linspace(0, T, N)
+
+# === Simulation Loop ===
+for i in range(N):
+    # Save current position
+    trajectory[i] = r
+
+    # Lorentz force: F = q(E + v × B)
+    force = q * (E + np.cross(v, B))
+
+    # Acceleration
+    a = force / m
+
+    # Euler integration (can upgrade to Runge-Kutta for higher accuracy)
+    v += a * dt
+    r += v * dt
+
+# === Plotting the Trajectory in XY Plane ===
+plt.figure(figsize=(6, 6))
+plt.plot(trajectory[:, 0], trajectory[:, 1], label='Trajectory')
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.title('Charged Particle in Magnetic Field (Circular Motion)')
+plt.grid(True)
+plt.axis('equal')
+plt.legend()
+plt.show()
+</code></pre>
+<p><img alt="alt text" src="../image.png"/></p>
 <hr/>
-<h2 id="simulating-particle-motion">Simulating Particle Motion</h2>
-<h3 id="simulation-requirements">Simulation Requirements</h3>
-<p>Implement a simulation to compute and visualize the trajectory of a charged particle under various field conditions:</p>
-<ol>
-<li>A uniform magnetic field.</li>
-<li>Combined uniform electric and magnetic fields.</li>
-<li>Crossed electric and magnetic fields.</li>
-</ol>
-<p>Simulate the particle’s motion, which could be circular, helical, or drift, based on initial conditions and field configurations.</p>
-<hr/>
-<h2 id="parameter-exploration">Parameter Exploration</h2>
-<p>Allow variations in the following parameters:</p>
-<ul>
-<li>Field strengths <span class="arithmatex">\( E \)</span>, <span class="arithmatex">\( B \)</span></li>
-<li>Initial particle velocity <span class="arithmatex">\( \vec{v} \)</span></li>
-<li>Charge and mass of the particle <span class="arithmatex">\( q \)</span>, <span class="arithmatex">\( m \)</span></li>
-</ul>
-<p>Observe how these parameters influence the particle's trajectory.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
