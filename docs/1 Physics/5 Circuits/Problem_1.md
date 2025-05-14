@@ -57,9 +57,6 @@ We will build a Python implementation that:
 - Simplifies the graph until one equivalent resistance remains
 
 ```python
-## Equivalent Resistance Using Graph Theory
-
-### Full Python Implementation (Graph Reduction)
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -143,7 +140,5 @@ def draw_graph(G):
     plt.show()
 
 draw_graph(G)
-
-
 
 ![alt text](image.png)
