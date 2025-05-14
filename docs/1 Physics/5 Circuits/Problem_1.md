@@ -92,3 +92,4 @@ def equivalent_resistance(G):
 eq_resistance = equivalent_resistance(G)
 print(f"Equivalent Resistance: {eq_resistance} Ohms")
 ```
+![alt text](image-1.png)
