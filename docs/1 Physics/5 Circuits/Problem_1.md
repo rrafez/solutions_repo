@@ -73,6 +73,8 @@ We will build a Python implementation that:
 - Identifies series and parallel nodes
 - Simplifies the graph until one equivalent resistance remains
 
+### Code
+
 ```python
 import networkx as nx
 import matplotlib.pyplot as plt
