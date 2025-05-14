@@ -133,4 +133,5 @@ def draw_graph(G):
 
 draw_graph(G)
 
+
 ![alt text](image.png)
