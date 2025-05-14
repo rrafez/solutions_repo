@@ -65,6 +65,14 @@ We will build a Python implementation that:
 - Simplifies the graph until one equivalent resistance remains
 
 
+## Full Python Implementation (Graph Reduction)
+
+We will build a Python implementation that:
+
+- Represents circuits as graphs
+- Identifies series and parallel nodes
+- Simplifies the graph until one equivalent resistance remains
+
 ```python
 import networkx as nx
 import matplotlib.pyplot as plt
