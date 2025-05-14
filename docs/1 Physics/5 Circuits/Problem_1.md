@@ -59,39 +59,49 @@ We will build a Python implementation that:
 ```python
 import networkx as nx
 
-def combine_parallel(resistors):
-    inv_sum = sum(1 / r for r in resistors)
+def combine_parallel(resistances):
+    inv_sum = sum(1 / r for r in resistances if r > 0)
     return 1 / inv_sum if inv_sum else float('inf')
 
-def combine_series(resistors):
-    return sum(resistors)
+def combine_series(resistances):
+    return sum(resistances)
 
 def simplify_graph(G, source, target):
+    G = G.copy()
     changed = True
     while changed:
         changed = False
-        # Series simplification
+
+        # Simplify series connections
         for node in list(G.nodes()):
             if node in (source, target):
                 continue
             neighbors = list(G.neighbors(node))
             if len(neighbors) == 2:
                 u, v = neighbors
-                if G.number_of_edges(node, u) == 1 and G.number_of_edges(node, v) == 1:
-                    r1 = G.edges[node, u]['resistance']
-                    r2 = G.edges[node, v]['resistance']
+                if G.has_edge(node, u) and G.has_edge(node, v):
+                    r1 = G[node][u]['resistance']
+                    r2 = G[node][v]['resistance']
                     G.remove_node(node)
-                    G.add_edge(u, v, resistance=r1 + r2)
+                    if G.has_edge(u, v):
+                        existing_r = G[u][v]['resistance']
+                        G[u][v]['resistance'] = combine_parallel([existing_r, r1 + r2])
+                    else:
+                        G.add_edge(u, v, resistance=r1 + r2)
                     changed = True
                     break
-        # Parallel simplification
+
+        # Simplify parallel connections
         for u, v in list(G.edges()):
-            all_edges = list(G.get_edge_data(u, v).values())
-            if len(all_edges) > 1:
-                resistances = [edata['resistance'] for edata in all_edges]
+            if G.number_of_edges(u, v) > 1:
+                resistances = [edata['resistance'] for key, edata in G[u][v].items()]
                 eq_res = combine_parallel(resistances)
-                G.remove_edges_from([(u, v)] * len(all_edges))
+                G.remove_edges_from([(u, v)] * G.number_of_edges(u, v))
                 G.add_edge(u, v, resistance=eq_res)
                 changed = True
                 break
-    return G.edges[source, target]['resistance']
+
+    if G.has_edge(source, target):
+        return G[source][target]['resistance']
+    else:
+        return float('inf')  # No path found
