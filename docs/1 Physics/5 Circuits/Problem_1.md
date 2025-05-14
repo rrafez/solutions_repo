@@ -57,20 +57,32 @@ We will build a Python implementation that:
 - Simplifies the graph until one equivalent resistance remains
 
 ```python
+## Equivalent Resistance Using Graph Theory
+
+### Full Python Implementation (Graph Reduction)
+
 import networkx as nx
 import matplotlib.pyplot as plt
 
 def combine_parallel(resistances):
+    """
+    Combine resistances in parallel using the formula:
+    $$ R_{parallel} = \frac{1}{\sum_{i=1}^{n} \frac{1}{R_i}} $$
+    """
     inv_sum = sum(1 / r for r in resistances if r > 0)
     return 1 / inv_sum if inv_sum else float('inf')
 
 def simplify_graph(G, source, target):
+    """
+    Simplifies the graph by combining parallel and series resistances.
+    Returns the equivalent resistance between `source` and `target`.
+    """
     G = G.copy()
     changed = True
     while changed:
         changed = False
 
-        # PARALLEL SIMPLIFICATION
+        # Parallel Simplification
         edges_to_merge = {}
         for u, v in G.edges():
             key = tuple(sorted((u, v)))
@@ -83,7 +95,7 @@ def simplify_graph(G, source, target):
                 G.add_edge(u, v, resistance=R_parallel)
                 changed = True
 
-        # SERIES SIMPLIFICATION
+        # Series Simplification
         for node in list(G.nodes()):
             if node in (source, target):
                 continue
@@ -107,7 +119,6 @@ def simplify_graph(G, source, target):
     else:
         return float('inf')  # No connection found
 
-# -------------------------
 # Example test circuit
 G = nx.Graph()
 G.add_edge('A', 'B', resistance=4)
@@ -116,7 +127,7 @@ G.add_edge('C', 'D', resistance=3)
 G.add_edge('B', 'D', resistance=2)  # Parallel to C-D
 G.add_edge('D', 'E', resistance=5)
 
-# Simplify and compute
+# Simplify and compute the equivalent resistance
 Req = simplify_graph(G, 'A', 'E')
 print(f"Equivalent resistance between A and E: {Req:.2f} Ω")
 
@@ -132,6 +143,7 @@ def draw_graph(G):
     plt.show()
 
 draw_graph(G)
+
 
 
 ![alt text](image.png)
