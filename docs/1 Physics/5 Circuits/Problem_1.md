@@ -58,13 +58,11 @@ We will build a Python implementation that:
 
 ```python
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def combine_parallel(resistances):
     inv_sum = sum(1 / r for r in resistances if r > 0)
     return 1 / inv_sum if inv_sum else float('inf')
-
-def combine_series(resistances):
-    return sum(resistances)
 
 def simplify_graph(G, source, target):
     G = G.copy()
@@ -72,36 +70,67 @@ def simplify_graph(G, source, target):
     while changed:
         changed = False
 
-        # Simplify series connections
+        # PARALLEL SIMPLIFICATION
+        edges_to_merge = {}
+        for u, v in G.edges():
+            key = tuple(sorted((u, v)))
+            edges_to_merge.setdefault(key, []).append(G[u][v]['resistance'])
+
+        for (u, v), res_list in edges_to_merge.items():
+            if len(res_list) > 1:
+                R_parallel = combine_parallel(res_list)
+                G.remove_edges_from([(u, v)] * G.number_of_edges(u, v))
+                G.add_edge(u, v, resistance=R_parallel)
+                changed = True
+
+        # SERIES SIMPLIFICATION
         for node in list(G.nodes()):
             if node in (source, target):
                 continue
             neighbors = list(G.neighbors(node))
             if len(neighbors) == 2:
                 u, v = neighbors
-                if G.has_edge(node, u) and G.has_edge(node, v):
+                if G.degree(node) == 2 and G.has_edge(node, u) and G.has_edge(node, v):
                     r1 = G[node][u]['resistance']
                     r2 = G[node][v]['resistance']
                     G.remove_node(node)
                     if G.has_edge(u, v):
-                        existing_r = G[u][v]['resistance']
-                        G[u][v]['resistance'] = combine_parallel([existing_r, r1 + r2])
+                        existing = G[u][v]['resistance']
+                        G[u][v]['resistance'] = combine_parallel([existing, r1 + r2])
                     else:
                         G.add_edge(u, v, resistance=r1 + r2)
                     changed = True
                     break
 
-        # Simplify parallel connections
-        for u, v in list(G.edges()):
-            if G.number_of_edges(u, v) > 1:
-                resistances = [edata['resistance'] for key, edata in G[u][v].items()]
-                eq_res = combine_parallel(resistances)
-                G.remove_edges_from([(u, v)] * G.number_of_edges(u, v))
-                G.add_edge(u, v, resistance=eq_res)
-                changed = True
-                break
-
     if G.has_edge(source, target):
         return G[source][target]['resistance']
     else:
-        return float('inf')  # No path found
+        return float('inf')  # No connection found
+
+# -------------------------
+# Example test circuit
+G = nx.Graph()
+G.add_edge('A', 'B', resistance=4)
+G.add_edge('B', 'C', resistance=6)
+G.add_edge('C', 'D', resistance=3)
+G.add_edge('B', 'D', resistance=2)  # Parallel to C-D
+G.add_edge('D', 'E', resistance=5)
+
+# Simplify and compute
+Req = simplify_graph(G, 'A', 'E')
+print(f"Equivalent resistance between A and E: {Req:.2f} Ω")
+
+# Visualization
+def draw_graph(G):
+    pos = nx.spring_layout(G, seed=42)
+    edge_labels = nx.get_edge_attributes(G, 'resistance')
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=700, font_weight='bold')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    plt.title("Circuit Graph")
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+draw_graph(G)
+
+![alt text](image.png)
