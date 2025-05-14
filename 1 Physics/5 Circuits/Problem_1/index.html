@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Problem 1 - Physics and Mathematics</title>
+<title>Circuits — Problem 1 - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Problem 1";
+        var mkdocs_page_name = "Circuits \u2014 Problem 1";
         var mkdocs_page_input_path = "1 Physics/5 Circuits/Problem_1.md";
         var mkdocs_page_url = null;
       </script>
@@ -76,7 +76,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal current">5 Circuits</a>
 <ul class="current">
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Circuits — Problem 1</a>
 <ul class="current">
 </ul>
 </li>
@@ -163,7 +163,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">5 Circuits</li>
-<li class="breadcrumb-item active">Problem 1</li>
+<li class="breadcrumb-item active">Circuits — Problem 1</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -171,7 +171,85 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-1">Problem 1</h1>
+<h1 id="circuits-problem-1">Circuits — Problem 1</h1>
+<h1 id="equivalent-resistance-using-graph-theory">Equivalent Resistance Using Graph Theory</h1>
+<h2 id="motivation">📘 Motivation</h2>
+<p>Calculating the <strong>equivalent resistance</strong> of a circuit is essential in understanding current flow, power distribution, and network behavior. For simple circuits, we can use well-known rules:</p>
+<ul>
+<li>Series: <span class="arithmatex">\(R_{\text{eq}} = R_1 + R_2 + \dots + R_n\)</span></li>
+<li>Parallel: <span class="arithmatex">\(\displaystyle \frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2} + \dots + \frac{1}{R_n}\)</span></li>
+</ul>
+<p>However, as circuits grow complex, identifying these combinations becomes harder.</p>
+<h3 id="graph-theory-approach">Graph Theory Approach</h3>
+<ul>
+<li>Treat each <strong>node</strong> (junction) as a <strong>vertex</strong></li>
+<li>Treat each <strong>resistor</strong> as an <strong>edge</strong> with a weight equal to its resistance</li>
+<li>Use <strong>graph simplification algorithms</strong> to reduce the graph</li>
+</ul>
+<p>This approach allows automatic, programmable simplification of circuits, even with <strong>nested</strong> and <strong>cyclical</strong> resistor networks.</p>
+<hr/>
+<h2 id="mathematical-basis">Mathematical Basis</h2>
+<p>Given a graph <span class="arithmatex">\(G = (V, E)\)</span>:
+- <span class="arithmatex">\(V\)</span> is the set of nodes
+- <span class="arithmatex">\(E\)</span> is the set of edges, each with a weight <span class="arithmatex">\(R_i\)</span> (resistance)</p>
+<p>We compute <strong>equivalent resistance</strong> between two nodes <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> using <strong>Y-Δ transforms</strong>, <strong>series/parallel reduction</strong>, or <strong>Kirchhoff's laws</strong> formulated in matrix form.</p>
+<p>We model the circuit as a <strong>weighted undirected graph</strong> and systematically reduce it using basic rules:</p>
+<h3 id="series-rule">🔧 Series Rule</h3>
+<p>If two resistors <span class="arithmatex">\(R_1\)</span> and <span class="arithmatex">\(R_2\)</span> connect in series:</p>
+<div class="arithmatex">\[
+R_{\text{eq}} = R_1 + R_2
+\]</div>
+<h3 id="parallel-rule">🔌 Parallel Rule</h3>
+<p>If they connect in parallel:</p>
+<div class="arithmatex">\[
+\frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2}
+\Rightarrow
+R_{\text{eq}} = \left( \frac{1}{R_1} + \frac{1}{R_2} \right)^{-1}
+\]</div>
+<hr/>
+<h2 id="full-python-implementation-graph-reduction">Full Python Implementation (Graph Reduction)</h2>
+<p>We will build a Python implementation that:</p>
+<ul>
+<li>Represents circuits as graphs</li>
+<li>Identifies series and parallel nodes</li>
+<li>Simplifies the graph until one equivalent resistance remains</li>
+</ul>
+<p>```python
+import networkx as nx</p>
+<p>def combine_parallel(resistors):
+    inv_sum = sum(1 / r for r in resistors)
+    return 1 / inv_sum if inv_sum else float('inf')</p>
+<p>def combine_series(resistors):
+    return sum(resistors)</p>
+<p>def simplify_graph(G, source, target):
+    changed = True
+    while changed:
+        changed = False
+        # Series simplification
+        for node in list(G.nodes()):
+            if node in (source, target):
+                continue
+            neighbors = list(G.neighbors(node))
+            if len(neighbors) == 2:
+                u, v = neighbors
+                if G.number_of_edges(node, u) == 1 and G.number_of_edges(node, v) == 1:
+                    r1 = G.edges[node, u]['resistance']
+                    r2 = G.edges[node, v]['resistance']
+                    G.remove_node(node)
+                    G.add_edge(u, v, resistance=r1 + r2)
+                    changed = True
+                    break
+        # Parallel simplification
+        for u, v in list(G.edges()):
+            all_edges = list(G.get_edge_data(u, v).values())
+            if len(all_edges) &gt; 1:
+                resistances = [edata['resistance'] for edata in all_edges]
+                eq_res = combine_parallel(resistances)
+                G.remove_edges_from([(u, v)] * len(all_edges))
+                G.add_edge(u, v, resistance=eq_res)
+                changed = True
+                break
+    return G.edges[source, target]['resistance']</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
