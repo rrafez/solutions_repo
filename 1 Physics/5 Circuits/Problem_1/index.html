@@ -296,6 +296,72 @@ eq_resistance = equivalent_resistance_series_parallel(G)
 print(f"Equivalent Resistance: {eq_resistance} Ohms")
 </code></pre>
 <p><img alt="alt text" src="../image-2.png"/></p>
+<hr/>
+<pre><code class="language-python">import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create a graph object representing the circuit
+G = nx.Graph()
+
+# Add nodes (junctions)
+nodes = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+G.add_nodes_from(nodes)
+
+# Add edges (resistors with their resistance values)
+# Mixed series and parallel connections
+G.add_edge('A', 'B', weight=10)  # Resistor between A and B with 10 Ohms (Series)
+G.add_edge('B', 'C', weight=20)  # Resistor between B and C with 20 Ohms (Series)
+G.add_edge('C', 'D', weight=30)  # Resistor between C and D with 30 Ohms (Series)
+G.add_edge('D', 'E', weight=40)  # Resistor between D and E with 40 Ohms (Series)
+
+G.add_edge('B', 'F', weight=50)  # Parallel resistor from B to F with 50 Ohms
+G.add_edge('C', 'G', weight=60)  # Parallel resistor from C to G with 60 Ohms
+
+# Create a function to display the circuit graph with unique visual features
+def plot_circuit_customized(G):
+    # Circular layout for nodes
+    pos = nx.circular_layout(G)  # Node positions arranged in a circle
+
+    # Get resistance values on edges
+    edge_labels = nx.get_edge_attributes(G, 'weight')
+
+    # Customize colors based on resistance values (lighter colors for higher resistance)
+    edge_colors = [plt.cm.viridis(r['weight'] / 60.0) for u, v, r in G.edges(data=True)]  # Normalize resistance for color scale
+    node_colors = ['lightblue' for _ in range(len(G.nodes()))]  # Uniform color for nodes
+    node_sizes = [500 for _ in range(len(G.nodes()))]  # Uniform node sizes
+    edge_widths = [r['weight'] / 10.0 for u, v, r in G.edges(data=True)]  # Width of edges based on resistance
+
+    plt.figure(figsize=(10, 8))
+
+    # Draw nodes and edges with customized styles
+    nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=node_colors, alpha=0.7)
+    nx.draw_networkx_edges(G, pos, width=edge_widths, edge_color=edge_colors, alpha=0.7)
+    nx.draw_networkx_labels(G, pos, font_size=16, font_weight='bold')
+
+    # Draw edge labels for resistance values
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=12, font_color='black')
+
+    # Add a title
+    plt.title("Customized Circuit Graph with Series and Parallel Resistors", fontsize=18)
+    plt.axis('off')  # Turn off axis
+    plt.show()
+
+# Display the customized circuit graph
+plot_circuit_customized(G)
+
+# Function to compute total equivalent resistance for series and parallel resistors
+def equivalent_resistance_series_parallel(G):
+    total_resistance = 0
+    for edge in G.edges(data=True):
+        total_resistance += edge[2]['weight']  # Summing resistances for the series connections
+    return total_resistance
+
+# Compute and print the total equivalent resistance for the circuit
+eq_resistance = equivalent_resistance_series_parallel(G)
+print(f"Total Equivalent Resistance (Series Only): {eq_resistance} Ohms")
+</code></pre>
+<p><img alt="alt text" src="../image-3.png"/></p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
