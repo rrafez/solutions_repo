@@ -207,16 +207,19 @@ Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 <li>Observe how the distribution evolves as <span class="arithmatex">\(n\)</span> increases</li>
 </ul>
 <hr/>
-<p>```python</p>
-<h1 id="central-limit-theorem-simulation-with-english-labels">🔬 Central Limit Theorem Simulation with English Labels</h1>
-<p>import numpy as np
+<pre><code class="language-python"># 🛠️ Code Implementation
+# Central Limit Theorem Simulation
+
+import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns</p>
-<h1 id="set-style-and-seed">Set style and seed</h1>
-<p>sns.set(style="whitegrid")
-np.random.seed(42)</p>
-<h1 id="generate-population-based-on-distribution-type">Generate population based on distribution type</h1>
-<p>def generate_population(dist_type, size=100000):
+import seaborn as sns
+
+# Set visual style and random seed
+sns.set(style="whitegrid")
+np.random.seed(42)
+
+# Function to generate population data
+def generate_population(dist_type, size=100000):
     if dist_type == "uniform":
         return np.random.uniform(0, 1, size)
     elif dist_type == "exponential":
@@ -224,34 +227,40 @@ np.random.seed(42)</p>
     elif dist_type == "binomial":
         return np.random.binomial(n=10, p=0.5, size=size)
     else:
-        raise ValueError("Unsupported distribution type")</p>
-<h1 id="compute-sample-means">Compute sample means</h1>
-<p>def get_sample_means(population, sample_size, n_samples=1000):
+        raise ValueError("Unsupported distribution type")
+
+# Function to compute sample means
+def get_sample_means(population, sample_size, n_samples=1000):
     means = []
     for _ in range(n_samples):
         sample = np.random.choice(population, size=sample_size, replace=False)
         means.append(np.mean(sample))
-    return means</p>
-<h1 id="plot-histograms-of-sample-means">Plot histograms of sample means</h1>
-<p>def plot_sampling_distributions(population, dist_name, sample_sizes):
-    fig, axes = plt.subplots(len(sample_sizes), 1, figsize=(8, 4 * len(sample_sizes)))
-    fig.suptitle(f"{dist_name.title()} Distribution - Sample Mean Distributions", fontsize=16)</p>
-<pre><code>for i, n in enumerate(sample_sizes):
-    means = get_sample_means(population, sample_size=n)
-    sns.histplot(means, kde=True, ax=axes[i], bins=30, color="skyblue")
-    axes[i].set_title(f"Sample Size = {n}")
-    axes[i].set_xlabel("Sample Mean")
-    axes[i].set_ylabel("Frequency")
+    return means
 
-plt.tight_layout(rect=[0, 0, 1, 0.95])
-plt.show()
-</code></pre>
-<h1 id="run-simulation">Run simulation</h1>
-<p>distributions = ['uniform', 'exponential', 'binomial']
-sample_sizes = [5, 10, 30, 50]</p>
-<p>for dist in distributions:
+# Function to plot sampling distributions
+def plot_sampling_distributions(population, dist_name, sample_sizes):
+    fig, axes = plt.subplots(len(sample_sizes), 1, figsize=(8, 4 * len(sample_sizes)))
+    fig.suptitle(f"{dist_name.title()} Distribution - Sample Mean Distributions", fontsize=16)
+
+    for i, n in enumerate(sample_sizes):
+        means = get_sample_means(population, sample_size=n)
+        sns.histplot(means, kde=True, ax=axes[i], bins=30, color="skyblue")
+        axes[i].set_title(f"Sample Size = {n}")
+        axes[i].set_xlabel("Sample Mean")
+        axes[i].set_ylabel("Frequency")
+
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.show()
+
+# Run simulation for multiple distributions and sample sizes
+distributions = ['uniform', 'exponential', 'binomial']
+sample_sizes = [5, 10, 30, 50]
+
+for dist in distributions:
     population = generate_population(dist)
-    plot_sampling_distributions(population, dist, sample_sizes)</p>
+    plot_sampling_distributions(population, dist, sample_sizes)
+</code></pre>
+<p><img alt="alt text" src="../indir.png"/></p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
