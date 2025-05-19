@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Problem 1 - Physics and Mathematics</title>
+<title>Statistics — Problem 1 - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Problem 1";
+        var mkdocs_page_name = "Statistics \u2014 Problem 1";
         var mkdocs_page_input_path = "1 Physics/6 Statistics/Problem_1.md";
         var mkdocs_page_url = null;
       </script>
@@ -82,7 +82,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal current">6 Statistics</a>
 <ul class="current">
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Statistics — Problem 1</a>
 <ul class="current">
 </ul>
 </li>
@@ -163,7 +163,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">6 Statistics</li>
-<li class="breadcrumb-item active">Problem 1</li>
+<li class="breadcrumb-item active">Statistics — Problem 1</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -171,7 +171,80 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-1">Problem 1</h1>
+<h1 id="statistics-problem-1">Statistics — Problem 1</h1>
+<h1 id="central-limit-theorem-through-simulations">Central Limit Theorem Through Simulations</h1>
+<h2 id="motivation">Motivation</h2>
+<p>The <strong>Central Limit Theorem (CLT)</strong> is one of the most important results in probability theory and statistics. It states:</p>
+<blockquote>
+<p>Given a sufficiently large sample size <span class="arithmatex">\(n\)</span>, the sampling distribution of the sample mean <span class="arithmatex">\(\bar{x}\)</span> will tend to follow a <strong>normal distribution</strong>, regardless of the shape of the population distribution.</p>
+</blockquote>
+<p>This is powerful because it allows us to make inferences about population means using normal probability methods — even when the population distribution is not normal.</p>
+<p>In this notebook, we explore the CLT <strong>empirically</strong> by simulating data from different types of distributions and analyzing the distribution of sample means for varying sample sizes.</p>
+<hr/>
+<h2 id="mathematical-framework">Mathematical Framework</h2>
+<h3 id="central-limit-theorem-formal-statement">Central Limit Theorem Formal Statement</h3>
+<p>Let <span class="arithmatex">\(X_1, X_2, \dots, X_n\)</span> be a random sample of size <span class="arithmatex">\(n\)</span> drawn from any population with:</p>
+<ul>
+<li>Finite mean <span class="arithmatex">\(\mu\)</span></li>
+<li>Finite variance <span class="arithmatex">\(\sigma^2\)</span></li>
+</ul>
+<p>Then, the distribution of the standardized sample mean:</p>
+<div class="arithmatex">\[
+Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+\]</div>
+<p>approaches the standard normal distribution <span class="arithmatex">\(N(0,1)\)</span> as <span class="arithmatex">\(n \to \infty\)</span>.</p>
+<hr/>
+<h2 id="simulation-plan">Simulation Plan</h2>
+<p>We will:</p>
+<ul>
+<li>Generate large populations from three different distributions:</li>
+<li><strong>Uniform</strong></li>
+<li><strong>Exponential</strong></li>
+<li><strong>Binomial</strong></li>
+<li>Draw repeated samples of different sizes (<span class="arithmatex">\(n = 5, 10, 30, 50\)</span>)</li>
+<li>Calculate the mean of each sample</li>
+<li>Plot the distribution of these sample means</li>
+<li>Observe how the distribution evolves as <span class="arithmatex">\(n\)</span> increases</li>
+</ul>
+<hr/>
+<p>```python</p>
+<h1 id="setup">Setup</h1>
+<p>import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns</p>
+<p>sns.set(style="whitegrid")
+np.random.seed(42)</p>
+<h1 id="function-generate-population">Function: Generate population</h1>
+<p>def generate_population(dist_type, size=100000):
+    if dist_type == "uniform":
+        return np.random.uniform(0, 1, size)
+    elif dist_type == "exponential":
+        return np.random.exponential(scale=1.0, size=size)
+    elif dist_type == "binomial":
+        return np.random.binomial(n=10, p=0.5, size=size)
+    else:
+        raise ValueError("Unknown distribution")</p>
+<h1 id="function-generate-sample-means">Function: Generate sample means</h1>
+<p>def get_sample_means(population, sample_size, n_samples=1000):
+    means = []
+    for _ in range(n_samples):
+        sample = np.random.choice(population, size=sample_size, replace=False)
+        means.append(np.mean(sample))
+    return means</p>
+<h1 id="function-plot-sampling-distribution">Function: Plot sampling distribution</h1>
+<p>def plot_sampling_distributions(population, dist_name, sample_sizes):
+    fig, axes = plt.subplots(len(sample_sizes), 1, figsize=(8, 4 * len(sample_sizes)))
+    fig.suptitle(f"{dist_name.title()} Population → Sampling Distributions", fontsize=16)</p>
+<pre><code>for i, n in enumerate(sample_sizes):
+    means = get_sample_means(population, sample_size=n)
+    sns.histplot(means, kde=True, ax=axes[i], bins=30, color="skyblue")
+    axes[i].set_title(f"Sample Size = {n}")
+    axes[i].set_xlabel("Sample Mean")
+    axes[i].set_ylabel("Frequency")
+
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+plt.show()
+</code></pre>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
