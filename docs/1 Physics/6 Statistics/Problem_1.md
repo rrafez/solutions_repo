@@ -48,17 +48,18 @@ We will:
 ---
 
 ```python
-# 🔬 Central Limit Theorem Simulation with English Labels
+# 🛠️ Code Implementation
+# Central Limit Theorem Simulation
 
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Set style and seed
+# Set visual style and random seed
 sns.set(style="whitegrid")
 np.random.seed(42)
 
-# Generate population based on distribution type
+# Function to generate population data
 def generate_population(dist_type, size=100000):
     if dist_type == "uniform":
         return np.random.uniform(0, 1, size)
@@ -69,7 +70,7 @@ def generate_population(dist_type, size=100000):
     else:
         raise ValueError("Unsupported distribution type")
 
-# Compute sample means
+# Function to compute sample means
 def get_sample_means(population, sample_size, n_samples=1000):
     means = []
     for _ in range(n_samples):
@@ -77,7 +78,7 @@ def get_sample_means(population, sample_size, n_samples=1000):
         means.append(np.mean(sample))
     return means
 
-# Plot histograms of sample means
+# Function to plot sampling distributions
 def plot_sampling_distributions(population, dist_name, sample_sizes):
     fig, axes = plt.subplots(len(sample_sizes), 1, figsize=(8, 4 * len(sample_sizes)))
     fig.suptitle(f"{dist_name.title()} Distribution - Sample Mean Distributions", fontsize=16)
@@ -92,12 +93,12 @@ def plot_sampling_distributions(population, dist_name, sample_sizes):
     plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.show()
 
-# Run simulation
+# Run simulation for multiple distributions and sample sizes
 distributions = ['uniform', 'exponential', 'binomial']
 sample_sizes = [5, 10, 30, 50]
 
 for dist in distributions:
     population = generate_population(dist)
     plot_sampling_distributions(population, dist, sample_sizes)
-
-
+```
+![alt text](indir.png)
