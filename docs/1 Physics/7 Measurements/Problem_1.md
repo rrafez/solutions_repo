@@ -1,6 +1,6 @@
-# 🌍 Measuring Earth's Gravitational Acceleration with a Pendulum
+#  Measuring Earth's Gravitational Acceleration with a Pendulum
 
-## 📘 Motivation
+##  Motivation
 
 The acceleration due to gravity ($g$) is a fundamental physical constant that governs motion on Earth. One classical and elegant method to measure $g$ is using a **simple pendulum**, whose oscillation period is directly related to $g$.
 
@@ -12,7 +12,7 @@ This experiment reinforces:
 
 ---
 
-## 🔬 Theory: Pendulum and Gravitational Acceleration
+##  Theory: Pendulum and Gravitational Acceleration
 
 For small angles ($\theta < 15^\circ$), the period $T$ of a simple pendulum is related to gravity $g$ and the pendulum length $L$ as:
 
@@ -28,7 +28,7 @@ To determine $g$ experimentally:
 
 ---
 
-## 🛠️ Setup
+##  Setup
 
 **Materials Required:**
 
@@ -39,7 +39,7 @@ To determine $g$ experimentally:
 
 ---
 
-## 📏 Data Collection Steps
+##  Data Collection Steps
 
 1. Attach the weight securely and measure the **length $L$** from the pivot to the center of mass of the weight.
 
@@ -63,7 +63,7 @@ $$
 
 ---
 
-## 🧮 Code Implementation
+##  Code Implementation
 
 ```python
 import numpy as np
